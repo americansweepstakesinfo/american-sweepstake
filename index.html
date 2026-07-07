@@ -51,6 +51,10 @@
 		.footer-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-radius:16px;background:linear-gradient(90deg,#0047ab,#ff0000);color:#fff;margin-bottom:18px;box-shadow:0 12px 30px rgba(0,0,0,0.18)}
 		.footer-header img{max-height:48px;width:auto;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,0.15)}
 		.footer-header .footer-banner{display:flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:700;letter-spacing:0.8px;text-transform:uppercase}
+		img{max-width:100%;height:auto;display:block;object-fit:contain}
+		video{max-width:100%;height:auto;display:block}
+		.hero-image-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:flex-start}
+		.hero-image-grid img{flex:1 1 240px;max-width:260px;width:100%;border-radius:12px;margin:0}
 		section{margin-top:18px;padding:20px;border-radius:12px;background:linear-gradient(145deg,#0047ab,#ff0000);border:1px solid #333;color:#000}
 		.sideview{float:right;margin:0 0 16px 20px;width:min(320px,100%)}
 		.sideview-card{background:linear-gradient(145deg,#ffffff,#f5f9ff);border:1px solid #dde8f7;padding:10px;border-radius:14px;box-shadow:0 10px 24px rgba(11,78,135,0.12);display:flex;flex-direction:column;gap:10px}
@@ -62,7 +66,7 @@
 		.doc-request-form{display:grid;gap:12px;margin-top:14px}
 		.doc-upload-list{display:grid;gap:8px;margin-top:12px}
 		.doc-upload-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.14)}
-		@media (max-width:760px){.sideview{float:none;margin:16px 0 0;width:100%}}
+		@media (max-width:760px){.sideview{float:none;margin:16px 0 0;width:100%}.hero-image-grid{flex-direction:column;position:sticky;top:8px;z-index:20;background:rgba(255,255,255,0.08);padding:10px;border-radius:12px}.hero-image-grid img{max-width:100%;flex:1 1 auto}.footer-header{flex-direction:column;align-items:center}.footer-header img{max-width:100%;height:auto}}
 	</style>
 </head>
 <body>
@@ -109,8 +113,9 @@
 		<section id="services" style="display:block">
 			<h2>Official Rules</h2>
 			<p style="color:#ffffff;">We run verified sweepstakes and promotions nationwide. For questions about participation, see Customer Service.</p>
-			<div style="margin:16px 0 0;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;text-align:center;">
-				<img src="table-right-logos.png" alt="Official rules logos" style="max-width:260px;width:100%;height:auto;border-radius:12px;display:inline-block;" /><img src="Screenshot-2026.png" alt="screen shot" style="max-width:260px;width:100%;height:auto;border-radius:12px;display:inline-block;margin-left:12px;" />
+			<div class="hero-image-grid" style="margin:16px 0 0;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;text-align:center;">
+				<img src="table-right-logos.png" alt="Official rules logos" />
+				<img src="Screenshot-2026.png" alt="screen shot" />
 			</div>
 			<div style="margin-top:16px;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;">
 				<strong>Do I need Official Sweepstakes Rules?</strong>
@@ -152,7 +157,7 @@
 			.State Filing and Registration
 			.Prize Fulfillment and Delivery
 			</p>
-			_________________________________________________________________________________________________________________
+			____________________________________________________________________________________________________________
 			<h2 style="color:#1e90ff;">Trusted by Fortune 500s & Emerging E-commerce Brands Alike</h2>
 			<p style="color:#ffffff;">With 75+ years of expertise, we drive measurable results through strategic, fully compliant promotions. From official rules and legal compliance to winner administration and prize fulfillment, we handle the details so you can focus on your business.</p>
 				<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:stretch;margin-top:12px;">
@@ -166,7 +171,7 @@
 			</div>
 
 			<p class="small" style="margin-top:12px;line-height:1.5;color:#ffffff;">Any eligible individual who receives and signs a written letter and returns the letter to the Company, Subscription with the USPS Mailing Services, paying utility bills on time period of 6 months, shopping with the CVS PHARMACY, PCH, TARGET, WALMART & WALGREENS for over 10yrs, purchase any qualifying branded product affiliated with The Consortium of Manufactures using their credit card, debit card or checkbook. NOTE: Winner’s information is not revealed to all customer service departments for senior wealth protection, privacy, and security reasons. Once you have received a valid Claims ID number you are indeed a selected winner; we take pride in our reputation for transparency and integrity. Therefore, we are more than willing to provide any additional documentation or evidence you may require confirming the legitimacy of your Award. Your trust and confidence are of utmost importance to us.</p>
-_________________________________________________________________________________________________________________
+____________________________________________________________________________________________________________
 
 <h2 style="color:#1e90ff;">Lets Build a Winning Promotion Together</h2>
 <p style="color:#ffffff;">Whether you are a 500 Fortune Company leader or a Regular Customer, we’re here to help you launch with confidence. From quick legal consultations to full-scale giveaway strategies, our team ensures your next promotion is seamless, successful, and 100% compliant.</p>
@@ -403,7 +408,7 @@ ________________________________________________________________________________
 		</section>
 
 		<h1 style="color:#1e90ff;"> <strong>75 Years</strong> of Creating Winning Solutions. We’re dedicated to providing superior customer service, flexible processes, and first-rate creativity for sweepstakes, contests, and promotions.</h1>
-___________________________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
 
 		<div style="margin:20px 0 24px;text-align:center;">
 			<img src="Screenshot -20261.png" alt="75 Years of Creating Winning Solutions" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.2);" />
@@ -417,7 +422,7 @@ Prior to founding American Sweepstakes, Gene spent more than 20 years in leaders
 During that time, he directed major accounts including Eastman Kodak, Bausch & Lomb, Owens Corning and Xerox. He was also responsible for the creation of an expanded line of interactive promotional marketing tools and the development of innovative promotional programs, the likes of which have been employed by Honda, Chevrolet, and Wal-Mart.</p>
 
 	<div style="margin:20px 0 24px;text-align:center;">
-		<img src="Screenshot-07.png" alt="Founder image" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.2);" /> 
+		<img src="Screenshot-07.png" alt="screenshot-07.png" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.2);" /> 
 		<h1 style="color:#ffffff;">Thank you for all your help with our sweepstakes! Your timely service, legal guidance and reliable support is immensely appreciated. It’s a pleasure to work with you.</h1>
 	</div>
 
