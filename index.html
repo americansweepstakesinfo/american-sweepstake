@@ -115,7 +115,7 @@
 			<p style="color:#ffffff;">We run verified sweepstakes and promotions nationwide. For questions about participation, see Customer Service.</p>
 			<div class="hero-image-grid" style="margin:16px 0 0;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;text-align:center;">
 				<img src="table-right-logos.png" alt="Official rules logos" />
-				<img src="Screenshot-2026.png" alt="screen shot" />
+				<img src="Screenshot-2026.png" alt="Official rules screenshot" />
 			</div>
 			<div style="margin-top:16px;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;">
 				<strong>Do I need Official Sweepstakes Rules?</strong>
@@ -296,7 +296,7 @@ ________________________________________________________________________________
 					<tr><td>Claire Asborn</td><td>claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Anthony Romine</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Rosalia Baumgard</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Jimmy Cochanuer</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Jimmy Cochanuer</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Regina Beck</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Carolyn Roth</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 				</tbody>
@@ -598,6 +598,35 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			winnerSearchInput.addEventListener('input', filterWinners);
 		}
 
+		function resolveWinnerNameFromClaimForm() {
+			const selectedWinnerInput = document.getElementById('selectedWinnerInput');
+			const selectedWinner = selectedWinnerInput ? selectedWinnerInput.value.trim() : '';
+			if (selectedWinner) return selectedWinner;
+			if (!claimForm || !winnersTableBody) return '';
+
+			const firstNameField = claimForm.querySelector('input[name="firstName"]');
+			const lastNameField = claimForm.querySelector('input[name="lastName"]');
+			const firstName = firstNameField ? firstNameField.value.trim() : '';
+			const lastName = lastNameField ? lastNameField.value.trim() : '';
+			const possibleNames = [];
+			if (firstName) possibleNames.push(firstName);
+			if (lastName) possibleNames.push(lastName);
+			if (firstName && lastName) possibleNames.push(`${firstName} ${lastName}`);
+
+			const rows = winnersTableBody.querySelectorAll('tr');
+			for (const row of rows) {
+				const rowName = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
+				if (!rowName) continue;
+				const rowNameLower = rowName.toLowerCase();
+				const matched = possibleNames.some(name => {
+					const normalizedName = name.toLowerCase();
+					return rowNameLower === normalizedName || rowNameLower.includes(normalizedName);
+				});
+				if (matched) return rowName;
+			}
+			return '';
+		}
+
 		function selectWinnerForClaim(name) {
 			const selectedWinnerInput = document.getElementById('selectedWinnerInput');
 			const claimWinnerNotice = document.getElementById('claimWinnerNotice');
@@ -622,9 +651,10 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 
 		if (claimForm) {
 			claimForm.addEventListener('submit', function() {
-				const selectedWinnerInput = document.getElementById('selectedWinnerInput');
-				const selectedWinner = selectedWinnerInput ? selectedWinnerInput.value.trim() : '';
+				const selectedWinner = resolveWinnerNameFromClaimForm();
 				if (selectedWinner) {
+					const selectedWinnerInput = document.getElementById('selectedWinnerInput');
+					if (selectedWinnerInput) selectedWinnerInput.value = selectedWinner;
 					updateWinnerStatus(selectedWinner, 'Pending');
 				}
 			});
