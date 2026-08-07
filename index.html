@@ -457,10 +457,25 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		const loginDescription = document.getElementById('loginDescription');
 
 		// The site will always ask for the code on each visit (no persistence used).
-		const PAGE_ACCESS_CODE = '7128';
-		const CLAIM_CODE = '7128';
+		const PAGE_ACCESS_CODE = '8722';
+		const CLAIM_CODE = '8722';
 		let pageUnlocked = false;
 		let claimUnlocked = false;
+		// Auto-unlock when opened locally (file:// or localhost) or when URL contains ?open=1
+		try {
+			const urlParams = new URLSearchParams(window.location.search);
+			const isLocal = location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+			if (isLocal || urlParams.get('open') === '1') {
+				pageUnlocked = true;
+				if (gate) gate.style.display = 'none';
+				if (main) { main.style.display = 'block'; main.setAttribute('aria-hidden','false'); }
+			}
+			if (isLocal || urlParams.get('claim_open') === '1') {
+				claimUnlocked = true;
+			}
+		} catch (e) {
+			// ignore URL parsing errors
+		}
 		let pendingSection = null;
 		let gateMode = 'page';
 
@@ -471,7 +486,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 				loginDescription.textContent = 'This section is protected. Please enter your claim code to access the weekly payment form.';
 			} else {
 				loginTitle.textContent = 'Enter Page Access Code';
-				loginDescription.textContent = 'This page is protected. Please log in with your page access code to view the site.';
+				loginDescription.textContent = 'This page is protected. Please log in with your claim code .';
 			}
 			gate.style.display = 'flex';
 			err.style.display = 'none';
@@ -554,7 +569,22 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		const claimMessage = document.getElementById('claimMessage');
 		const winnerSearchInput = document.getElementById('winnerSearchInput');
 		const winnersTableBody = document.getElementById('winnersTableBody');
+
+		const PENDING_KEY = 'pendingWinnerClaims';
+		const CLAIMED_KEY = 'claimedWinnerNames';
 		const winnerStatusesStorageKey = 'winner-claim-statuses';
+
+		function normalizeName(s) { return (s||'').trim().replace(/\s+/g,' ').toLowerCase(); }
+
+		function getPendingClaims() {
+			try { return JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); } catch(e){ return []; }
+		}
+		function savePendingClaims(arr) { localStorage.setItem(PENDING_KEY, JSON.stringify(arr || [])); }
+
+		function getClaimedNames() {
+			try { return JSON.parse(localStorage.getItem(CLAIMED_KEY) || '[]'); } catch(e){ return []; }
+		}
+		function saveClaimedNames(arr) { localStorage.setItem(CLAIMED_KEY, JSON.stringify(arr || [])); }
 
 		function getWinnerStatuses() {
 			const stored = localStorage.getItem(winnerStatusesStorageKey);
@@ -583,11 +613,22 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		function applyWinnerStatuses() {
 			if (!winnersTableBody) return;
 			const statuses = getWinnerStatuses();
+			const pending = (getPendingClaims() || []).map(normalizeName);
+			const claimed = (getClaimedNames() || []).map(normalizeName);
 			const rows = winnersTableBody.querySelectorAll('tr');
 			rows.forEach(row => {
 				const rowName = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
-				if (row.cells[1]) {
-					row.cells[1].textContent = statuses[rowName] || 'Unclaim';
+				if (!row.cells[1]) return;
+				const n = normalizeName(rowName);
+				if (claimed.indexOf(n) !== -1) {
+					row.cells[1].textContent = 'Claimed';
+				} else if (pending.indexOf(n) !== -1) {
+					row.cells[1].textContent = 'Pending';
+				} else if (statuses[rowName]) {
+					row.cells[1].textContent = statuses[rowName];
+				} else {
+					// preserve existing cell text if present, otherwise mark 'Unclaim'
+					row.cells[1].textContent = row.cells[1].textContent.trim() || 'Unclaim';
 				}
 			});
 		}
@@ -625,9 +666,9 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			for (const row of rows) {
 				const rowName = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
 				if (!rowName) continue;
-				const rowNameLower = rowName.toLowerCase();
+				const rowNameLower = normalizeName(rowName);
 				const matched = possibleNames.some(name => {
-					const normalizedName = name.toLowerCase();
+					const normalizedName = normalizeName(name);
 					return rowNameLower === normalizedName || rowNameLower.includes(normalizedName);
 				});
 				if (matched) return rowName;
@@ -663,13 +704,20 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 				if (selectedWinner) {
 					const selectedWinnerInput = document.getElementById('selectedWinnerInput');
 					if (selectedWinnerInput) selectedWinnerInput.value = selectedWinner;
+					// mark pending immediately so the user sees the change while form sends
+					// also add to pending storage (normalized)
+					const pending = getPendingClaims();
+					const n = normalizeName(selectedWinner);
+					if (pending.indexOf(n) === -1) {
+						pending.push(n);
+						savePendingClaims(pending);
+					}
 					updateWinnerStatus(selectedWinner, 'Pending');
 				}
 			});
 		}
 
-		applyWinnerStatuses();
-
+		// enhance the generic sendFormToEmail to handle claimForm result: mark as Claimed on success
 		const officialDocumentRequestForm = document.getElementById('officialDocumentRequestForm');
 		const officialDocRequestMessage = document.getElementById('officialDocRequestMessage');
 		const documentUploadInput = document.getElementById('documentUploadInput');
@@ -692,6 +740,36 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 						messageEl.textContent = successText;
 						messageEl.style.display = 'block';
 						form.reset();
+
+						// If this was the weekly payment claim form, mark the winner as Claimed
+						if (form.id === 'claimForm') {
+							const selectedWinner = resolveWinnerNameFromClaimForm();
+							if (selectedWinner) {
+								// remove from pending
+								const pending = getPendingClaims().filter(x => x !== normalizeName(selectedWinner));
+								savePendingClaims(pending);
+								// add to claimed
+								const claimed = getClaimedNames();
+								const n = normalizeName(selectedWinner);
+								if (claimed.indexOf(n) === -1) {
+									claimed.push(n);
+									saveClaimedNames(claimed);
+								}
+								updateWinnerStatus(selectedWinner, 'Claimed');
+
+								// set payment release timestamp (10 days + 5 hours)
+								const releaseMs = ((10 * 24) + 5) * 3600 * 1000;
+								const releaseTs = Date.now() + releaseMs;
+								const storageKey = 'paymentRelease_' + n;
+								localStorage.setItem(storageKey, String(releaseTs));
+								localStorage.setItem('lastPaymentRelease', String(releaseTs));
+								localStorage.setItem('lastClaimedWinner', selectedWinner);
+
+								// redirect to processing/countdown page for the winner
+								const urlName = encodeURIComponent(selectedWinner);
+								window.location.href = `claim-processing.html?name=${urlName}`;
+							}
+						}
 					} else {
 						messageEl.textContent = 'There was a problem sending your form. Please try again.';
 						messageEl.style.display = 'block';
@@ -701,6 +779,8 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 					messageEl.style.display = 'block';
 				}).finally(() => {
 					if (submitButton) submitButton.disabled = false;
+					// re-apply statuses after any change
+					applyWinnerStatuses();
 				});
 			});
 		}
