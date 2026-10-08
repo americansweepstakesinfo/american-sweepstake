@@ -16,21 +16,24 @@
     .promo{background:rgba(255,255,255,0.06);padding:12px;border-radius:10px}
     .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:999;}
     .modal{background:#fff;color:#111;padding:18px;border-radius:10px;max-width:560px;width:94%}
+    .registration-locked{overflow:hidden}
+    .welcome-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0047ab,#ff0000);z-index:1000}
+    .welcome-card{box-sizing:border-box;width:100%;min-height:100%;padding:clamp(32px,8vw,100px);display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,#0047ab,#ff0000);text-align:center}
+    .welcome-card h2{margin:0;color:#ffff00;font-size:clamp(40px,8vw,88px)}
+    .welcome-card p{max-width:1000px;line-height:1.6;font-size:clamp(22px,4vw,40px)}
+    .welcome-card .btn{font-size:clamp(18px,2.5vw,26px);padding:14px 32px}
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     label{display:block;color:#111}
     input,select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc}
     .full{grid-column:1/-1}
   </style>
 </head>
-<body>
-  <main class="container">
+<body class="registration-locked">
+  <main class="container" id="registrationPage" inert>
     <header>
       <div>
         <h1>American Sweepstakes & Promotion Co.</h1>
         <p style="margin:6px 0 0">Win Big Live Better Chance To Financial Freedom With (ASP) By Simply Becoming apart of our Family.</p>
-      </div>
-      <div>
-        <button class="btn" id="contestBtn">Contest</button>
       </div>
     </header>
 
@@ -84,24 +87,25 @@
           <label class="full">Home Address<input type="text" name="homeAddress" required /></label>
           <label>Telephone Number<input type="tel" name="telNumber" required /></label>
           <label>Email Address<input type="email" name="emailAddress" required /></label>
-          <label>Payment Method<select name="paymentMethod" required>
-            <option value="Visa">Visa</option>
-            <option value="MasterCard">MasterCard</option>
-            <option value="Debit Card">Debit Card</option>
-            <option value="Credit Card">Credit Card</option>
-            <option value="PayPal">PayPal</option>
-            <option value="Bitcoin">Bitcoin</option>
           </select></label>
           <label class="full">Notes (optional)<textarea name="notes" placeholder="Any additional info"></textarea></label>
         </div>
         <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn" type="submit">Continue & Subscribe</button>
-          <button class="btn" type="reset" style="background:#fff;color:#000">Reset</button>
+          <button class="btn" type="button" onclick="window.location.href='index.html'" style="background:#fff;color:#000">Back</button>
         </div>
         <p id="signupMessage" style="display:none;margin-top:10px;color:yellow"></p>
       </form>
     </section>
   </main>
+
+  <div class="welcome-screen" id="welcomeScreen">
+    <section class="welcome-card" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+      <h2 id="welcomeTitle">Welcome to Registration</h2>
+      <p>Win Big Live Better Chance To Financial Freedom With (ASP) By Simply Becoming apart of our Family.</p>
+      <button class="btn" id="welcomeNext" type="button">Next</button>
+    </section>
+  </div>
 
   <div id="promoModal" style="display:none;" class="overlay">
     <div class="modal" role="dialog" aria-modal="true">
@@ -115,8 +119,10 @@
   </div>
 
   <script>
-    document.getElementById('contestBtn').addEventListener('click', function(){
-      alert('Win Big Live Better Chance To Financial Freedom With (ASP) By Simply Becoming apart of our Family.');
+    document.getElementById('welcomeNext').addEventListener('click', function(){
+      document.getElementById('welcomeScreen').remove();
+      document.getElementById('registrationPage').removeAttribute('inert');
+      document.body.classList.remove('registration-locked');
     });
 
     function openPromo(name, fee){

