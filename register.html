@@ -14,18 +14,12 @@
     .btn{background:linear-gradient(90deg,#ffff00,#ff6600);color:#000;border:none;padding:10px 16px;border-radius:999px;cursor:pointer}
     .promo-list{display:grid;gap:12px;margin-top:18px}
     .promo{background:rgba(255,255,255,0.06);padding:12px;border-radius:10px}
-    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:999;}
-    .modal{background:#fff;color:#111;padding:18px;border-radius:10px;max-width:560px;width:94%}
     .registration-locked{overflow:hidden}
     .welcome-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0047ab,#ff0000);z-index:1000}
     .welcome-card{box-sizing:border-box;width:100%;min-height:100%;padding:clamp(32px,8vw,100px);display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(145deg,#0047ab,#ff0000);text-align:center}
     .welcome-card h2{margin:0;color:#ffff00;font-size:clamp(40px,8vw,88px)}
     .welcome-card p{max-width:1000px;line-height:1.6;font-size:clamp(22px,4vw,40px)}
     .welcome-card .btn{font-size:clamp(18px,2.5vw,26px);padding:14px 32px}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    label{display:block;color:#111}
-    input,select,textarea{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc}
-    .full{grid-column:1/-1}
   </style>
 </head>
 <body class="registration-locked">
@@ -38,84 +32,52 @@
     </header>
 
     <section style="margin-top:18px">
-      <h2 style="margin:0 0 8px">Promotions</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px">
+        <h2 id="promotionsTitle" tabindex="-1" style="margin:0">Choose a promotion</h2>
+        <a class="btn" href="index.html" style="text-decoration:none">Home</a>
+      </div>
       <div class="promo-list">
         <div class="promo">
           <strong>Sandals</strong>
           <p>Win up to 1,000,000.00 and a chance to stay 4 days and 3 nights at any one of Sandals Hotel in the Caribbean. $55 to subscribe for a chance to win.</p>
-          <button class="btn" onclick="openPromo('Sandals','$55')">Click here to subscribe</button>
+          <button class="btn" type="button" onclick="openPromo('Sandals')">Choose promotion</button>
         </div>
         <div class="promo">
           <strong>Sheetz</strong>
           <p>Win Free Gas 4 Life. $15 to subscribe for a chance to win.</p>
-          <button class="btn" onclick="openPromo('Sheetz','$15')">Click here to subscribe</button>
+          <button class="btn" type="button" onclick="openPromo('Sheetz')">Choose promotion</button>
         </div>
         <div class="promo">
           <strong>Walmart</strong>
           <p>Win a $1,000 Walmart Gift Card. $30 to subscribe for a chance to win.</p>
-          <button class="btn" onclick="openPromo('Walmart','$30')">Click here to subscribe</button>
+          <button class="btn" type="button" onclick="openPromo('Walmart')">Choose promotion</button>
         </div>
         <div class="promo">
           <strong>Stake Us & St Jude Dream Home</strong>
           <p>Win a house with 1,000,000.00 jackpot and a luxurious home in Miami. $45 to subscribe for a chance to win.</p>
-          <button class="btn" onclick="openPromo('Stake Us & St Jude Dream Home','$45')">Click here to subscribe</button>
-        </div>
-        <div class="promo">
-          <strong>MEGA Millions</strong>
-          <p>Win the next estimated jackpot of 90 Million without buying a ticket by simply subscribing for a chance to win. $10 to subscribe for a chance to win.</p>
-          <button class="btn" onclick="openPromo('MEGA Millions','$10')">Click here to subscribe</button>
+          <button class="btn" type="button" onclick="openPromo('Stake Us & St Jude Dream Home')">Choose promotion</button>
         </div>
         <div class="promo">
           <strong>Wrestle Mania (WWE)</strong>
           <p>Win a trip to Wrestle Mania. $7 to subscribe for a chance to win.</p>
-          <button class="btn" onclick="openPromo('Wrestle Mania (WWE)','$7')">Click here to subscribe</button>
+          <button class="btn" type="button" onclick="openPromo('Wrestle Mania (WWE)')">Choose promotion</button>
+        </div>
+        <div class="promo">
+          <strong>Set For Life Grand Promotion</strong>
+          <p>A chance to win big with the Set For Life Grand Promotion.</p>
+          <button class="btn" type="button" onclick="openPromo('Set For Life Grand Promotion')">Choose promotion</button>
         </div>
       </div>
     </section>
 
-    <section id="signup" style="margin-top:26px">
-      <h2>Subscription Form</h2>
-      <p class="small">Fill out your details and choose a payment method. All submissions are sent to our email.</p>
-      <form id="signupForm" action="https://formsubmit.co/ajax/hashmatali20001@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New Promotion Subscription" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="chosenPromotion" id="chosenPromotionField" value="" />
-        <div class="form-grid" style="margin-top:12px">
-          <label>First Name<input type="text" name="firstName" required /></label>
-          <label>Last Name<input type="text" name="lastName" required /></label>
-          <label class="full">Home Address<input type="text" name="homeAddress" required /></label>
-          <label>Telephone Number<input type="tel" name="telNumber" required /></label>
-          <label>Email Address<input type="email" name="emailAddress" required /></label>
-          </select></label>
-          <label class="full">Notes (optional)<textarea name="notes" placeholder="Any additional info"></textarea></label>
-        </div>
-        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn" type="submit">Continue & Subscribe</button>
-          <button class="btn" type="button" onclick="window.location.href='index.html'" style="background:#fff;color:#000">Back</button>
-        </div>
-        <p id="signupMessage" style="display:none;margin-top:10px;color:yellow"></p>
-      </form>
-    </section>
   </main>
 
   <div class="welcome-screen" id="welcomeScreen">
     <section class="welcome-card" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
       <h2 id="welcomeTitle">Welcome to Registration</h2>
-      <p>Win Big Live Better Chance To Financial Freedom With (ASP) By Simply Becoming apart of our Family.</p>
+      <p>Choose a promotion you feel comfortable entering. After you choose, you can enter your personal details on the next page.</p>
       <button class="btn" id="welcomeNext" type="button">Next</button>
     </section>
-  </div>
-
-  <div id="promoModal" style="display:none;" class="overlay">
-    <div class="modal" role="dialog" aria-modal="true">
-      <h3 id="promoTitle">Subscribe</h3>
-      <p id="promoText">You are only subscribing for a chance to become a part of our family and to be a winner. You might not be selected but faith will move mountains. If you've acknowledged the terms and conditions click Continue.</p>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
-        <button class="btn" id="modalContinue">Continue</button>
-        <button class="btn" id="modalClose" style="background:#fff;color:#000">Cancel</button>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -123,60 +85,12 @@
       document.getElementById('welcomeScreen').remove();
       document.getElementById('registrationPage').removeAttribute('inert');
       document.body.classList.remove('registration-locked');
+      document.getElementById('promotionsTitle').focus();
     });
 
-    function openPromo(name, fee){
-      document.getElementById('promoTitle').textContent = name + ' — Subscribe';
-      document.getElementById('promoText').textContent = 'You are only subscribing for a chance to become a part of our family and to be a winner. You might not be selected but faith will move mountains. Fee: ' + fee + '. Click Continue if you acknowledge the terms and conditions.';
-      document.getElementById('promoModal').style.display = 'flex';
-      document.getElementById('chosenPromotionField').value = name;
+    function openPromo(name){
+      window.location.href = 'subscription.html?promotion=' + encodeURIComponent(name);
     }
-
-    document.getElementById('modalClose').addEventListener('click', function(){ document.getElementById('promoModal').style.display='none'; });
-    document.getElementById('modalContinue').addEventListener('click', function(){
-      document.getElementById('promoModal').style.display='none';
-      document.getElementById('signupForm').scrollIntoView({behavior:'smooth'});
-      const chosen = document.getElementById('chosenPromotionField').value;
-      if(chosen){ document.querySelector('input[name="firstName"]').focus(); }
-    });
-
-    const signupForm = document.getElementById('signupForm');
-    const signupMessage = document.getElementById('signupMessage');
-    signupForm.addEventListener('submit', function(e){
-      e.preventDefault();
-      const submitBtn = signupForm.querySelector('button[type="submit"]');
-      if(submitBtn) submitBtn.disabled = true;
-      const chosen = document.getElementById('chosenPromotionField').value || '';
-      signupForm.chosenPromotion.value = chosen;
-      if (chosen === 'Sandals') {
-        window.location.href = 'https://buy.stripe.com/test_8x23cu8kc0KU9rNdeGfQI00';
-        return;
-      }
-      if (chosen === 'Stake Us & St Jude Dream Home') {
-        window.location.href = 'https://buy.stripe.com/test_dRmbJ0fME9hq8nJ4IafQI01';
-        return;
-      }
-      if (chosen === 'MEGA Millions') {
-        window.location.href = 'https://buy.stripe.com/test_cNi4gy7g8bpydI3a2ufQI02';
-        return;
-      }
-      if (chosen === 'Sheetz') {
-        window.location.href = 'https://buy.stripe.com/test_cNi4gy7g8bpydI3a2ufQI02';
-        return;
-      }
-      if (chosen === 'Wrestle Mania (WWE)') {
-        window.location.href = 'https://buy.stripe.com/test_14A6oG8kc9hq7jF7UmfQI04';
-        return;
-      }
-      fetch(signupForm.action, {method: signupForm.method, body: new FormData(signupForm)})
-        .then(res => {
-          if(res.ok){
-            alert('Thank you! Your subscription has been received. A representative will follow up via email.');
-            signupForm.reset();
-          } else { signupMessage.textContent='There was a problem sending your request. Please try again.'; signupMessage.style.display='block'; }
-        }).catch(()=>{ signupMessage.textContent='There was a problem sending your request. Please try again.'; signupMessage.style.display='block'; })
-        .finally(()=>{ if(submitBtn) submitBtn.disabled = false; });
-    });
   </script>
 </body>
 </html>
