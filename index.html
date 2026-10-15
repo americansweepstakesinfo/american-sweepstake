@@ -25,7 +25,7 @@
 		.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(229,57,53,0.2);background:linear-gradient(90deg,#1e88e5,var(--accent-2))}
 		.winner-cta{background:linear-gradient(90deg,#0047ab,#ff0000);color:#fff;border:none;padding:14px 22px;border-radius:999px;font-weight:700;box-shadow:0 12px 24px rgba(0,0,0,0.2);transition:transform .1s ease, box-shadow .1s ease, background .1s ease}
 		.winner-cta:hover{transform:translateY(-2px);box-shadow:0 14px 26px rgba(0,0,0,0.22);background:linear-gradient(90deg,#ff0000,#0047ab)}
-			.promo{margin-top:20px;padding:16px;border-radius:10px;background:linear-gradient(90deg,#0047ab,#ff0000);border:1px solid rgba(229,57,53,0.25);color:#1e90ff}
+			.promo{margin-top:20px;padding:16px;border-radius:10px;background:#d4af37;border:1px solid rgba(255,255,255,0.35);color:#fff}
 		.overlay{position:fixed;inset:0;background:linear-gradient(rgba(3,10,20,0.65),rgba(3,10,20,0.65)),url('vidu-image-33.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;z-index:999}
 		.panel{background:linear-gradient(145deg,#0047ab,#ff0000);padding:28px;border-radius:12px;max-width:420px;width:94%;box-shadow:0 12px 40px rgba(2,6,23,0.4);text-align:center;backdrop-filter:blur(6px);border:1px solid rgba(11,94,215,0.16)}
 		.form-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:12px}
@@ -66,16 +66,20 @@
 		.doc-request-form{display:grid;gap:12px;margin-top:14px}
 		.doc-upload-list{display:grid;gap:8px;margin-top:12px}
 		.doc-upload-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.14)}
-		.home-winners-layout{display:flow-root}
-		.home-winners-sideview{box-sizing:border-box;float:right;width:min(320px,40%);margin:0 0 16px 20px;padding:16px;border:1px solid rgba(255,255,255,0.28);border-radius:12px;background:rgba(255,255,255,0.12);color:#fff}
-		.home-winners-sideview h3{margin:0 0 8px;color:#fff}
-		.home-winners-sideview p{color:#e8f4ff}
-		.home-winners-list{display:grid;gap:8px;max-height:340px;overflow:auto;margin:12px 0;padding:0;list-style:none}
-		.home-winners-list li{display:flex;justify-content:space-between;gap:10px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.1);color:#fff}
-		.home-winners-list li span:last-child{font-size:12px;color:#e8f4ff}
+		#services>h2,#winners>h2{color:#ffd700}
+		.home-promo-layout{display:flow-root}
+		.home-promo-sideview{box-sizing:border-box;float:right;width:min(320px,40%);margin:0 0 16px 20px;padding:16px;border:1px solid rgba(255,255,255,0.28);border-radius:12px;background:rgba(255,255,255,0.12);color:#fff}
+		.home-promo-sideview h3{margin:0 0 8px;color:#ffd700}
+		.home-promo-sideview p{color:#e8f4ff}
+		.home-promo-slides{position:relative;margin:12px 0}
+		.home-promo-slide{animation:home-promo-fade .5s ease}
+		.home-promo-slide img{width:100%;height:190px;border-radius:10px;object-fit:cover}
+		.home-promo-slide figcaption{margin-top:8px;color:#fff;font-weight:700;text-align:center}
+		@keyframes home-promo-fade{from{opacity:.35}to{opacity:1}}
 		#services::after{content:"";display:block;clear:both}
 		@media (max-width:760px){.sideview{float:none;margin:16px 0 0;width:100%}.hero-image-grid{flex-direction:column;position:sticky;top:8px;z-index:20;background:rgba(255,255,255,0.08);padding:10px;border-radius:12px}.hero-image-grid img{max-width:100%;flex:1 1 auto}.footer-header{flex-direction:column;align-items:center}.footer-header img{max-width:100%;height:auto}}
-		@media (max-width:760px){.home-winners-sideview{float:none;width:auto;margin:16px 0}}
+		@media (max-width:760px){.home-promo-sideview{float:none;width:auto;margin:16px 0}}
+		@media (prefers-reduced-motion:reduce){.home-promo-slide{animation:none}}
 	</style>
 </head>
 <body>
@@ -157,7 +161,7 @@
 			<p style="color:#ffffff;">We are a trusted promotional marketing company with over 75 years of experience in administering sweepstakes, contests, and game promotions for some of the biggest marketers in America. Our team ensures that your promotions are fully legal and compliant with all rules, regulations, and promotional guidelines across various platforms.</p>
 			<div class="sideview">
 				<div class="sideview-card">
-					<img src="tablet-left-facing-walmart.png" alt="Walmart tablet side view" />
+					<img src="walmart.png.png" alt="Walmart" />
 					<img src="tablet-left-facing-80.png" alt="Tablet side view" />
 				</div>
 			</div>
@@ -535,12 +539,29 @@ ________________________________________________________________________________
 			</div>
 		</section>
 
-		<div class="home-winners-layout">
-			<aside class="home-winners-sideview" id="homeWinnersSideview" aria-labelledby="homeWinnersTitle">
-				<h3 id="homeWinnersTitle">Winners List</h3>
-				<p class="small" style="margin:0;">Entries and statuses below mirror the site's Winners List and are not independent verification of winner selection or awards.</p>
-				<ul class="home-winners-list" id="homeWinnersList" aria-live="polite"></ul>
-				<button class="btn" type="button" onclick="showSection('winners')">View Full List</button>
+		<div class="home-promo-layout">
+			<aside class="home-promo-sideview" id="homePromotionSideview" aria-labelledby="homePromotionTitle">
+				<h3 id="homePromotionTitle">Featured Promotions</h3>
+				<p class="small" style="margin:0;">Discover featured promotions and the Set for Life grand prize.</p>
+				<div class="home-promo-slides" id="homePromotionSlides" aria-label="Featured promotion advertisements">
+					<figure class="home-promo-slide" aria-hidden="false">
+						<img src="walmart.png.png" alt="Walmart promotion" />
+						<figcaption>Walmart Promotions</figcaption>
+					</figure>
+					<figure class="home-promo-slide" aria-hidden="true" hidden>
+						<img src="wrestlemania.png.png" alt="WrestleMania promotion" />
+						<figcaption>WrestleMania Promotions</figcaption>
+					</figure>
+					<figure class="home-promo-slide" aria-hidden="true" hidden>
+						<img src="sheetz.jpg.webp" alt="Sheetz promotion" />
+						<figcaption>Sheetz Promotions</figcaption>
+					</figure>
+					<figure class="home-promo-slide" aria-hidden="true" hidden>
+						<img src="Sandals.png.png" alt="Sandals promotion" />
+						<figcaption>Sandals Promotions</figcaption>
+					</figure>
+				</div>
+				<button class="btn" type="button" onclick="showSection('promotion')">Explore Promotion</button>
 			</aside>
 			<h1 style="color:#1e90ff;"> <strong>75 Years</strong> of Creating Winning Solutions. We’re dedicated to providing superior customer service, flexible processes, and first-rate creativity for sweepstakes, contests, and promotions.</h1>
 		</div>
@@ -558,7 +579,7 @@ Prior to founding American Sweepstakes, Gene spent more than 20 years in leaders
 During that time, he directed major accounts including Eastman Kodak, Bausch & Lomb, Owens Corning and Xerox. He was also responsible for the creation of an expanded line of interactive promotional marketing tools and the development of innovative promotional programs, the likes of which have been employed by Honda, Chevrolet, and Wal-Mart.</p>
 
 	<div style="margin:20px 0 24px;text-align:center;">
-		<img src="Screenshot-07.png" alt="screenshot-07.png" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.2);" /> 
+		<img src="Sandals.png.png" alt="Sandals" style="max-width:100%;height:auto;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.2);" /> 
 		<h1 style="color:#ffffff;">Thank you for all your help with our sweepstakes! Your timely service, legal guidance and reliable support is immensely appreciated. It’s a pleasure to work with you.</h1>
 	</div>
 
@@ -656,8 +677,8 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			document.querySelectorAll('main section').forEach(s=>s.style.display='none');
 			const el = document.getElementById(id);
 			if(el) el.style.display='block';
-			const homeWinnersSideview = document.getElementById('homeWinnersSideview');
-			if (homeWinnersSideview) homeWinnersSideview.style.display = id === 'services' ? 'block' : 'none';
+			const homePromotionSideview = document.getElementById('homePromotionSideview');
+			if (homePromotionSideview) homePromotionSideview.style.display = id === 'services' ? 'block' : 'none';
 		}
 
 		form.addEventListener('submit', function(e){
@@ -719,29 +740,16 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		const claimMessage = document.getElementById('claimMessage');
 		const winnerSearchInput = document.getElementById('winnerSearchInput');
 		const winnersTableBody = document.getElementById('winnersTableBody');
-		const homeWinnersList = document.getElementById('homeWinnersList');
-
-		function renderHomeWinners() {
-			if (!homeWinnersList || !winnersTableBody) return;
-			const fragment = document.createDocumentFragment();
-			winnersTableBody.querySelectorAll('tr').forEach(row => {
-				const name = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
-				const status = row.cells && row.cells[1] ? row.cells[1].textContent.trim() : '';
-				if (!name) return;
-				const item = document.createElement('li');
-				const nameLabel = document.createElement('span');
-				const statusLabel = document.createElement('span');
-				nameLabel.textContent = name;
-				statusLabel.textContent = status;
-				item.append(nameLabel, statusLabel);
-				fragment.appendChild(item);
-			});
-			homeWinnersList.replaceChildren(fragment);
-			if (!homeWinnersList.childElementCount) {
-				const emptyItem = document.createElement('li');
-				emptyItem.textContent = 'No entries are listed.';
-				homeWinnersList.appendChild(emptyItem);
-			}
+		const homePromotionSlides = document.querySelectorAll('#homePromotionSlides .home-promo-slide');
+		if (homePromotionSlides.length > 1) {
+			let activePromotionSlide = 0;
+			window.setInterval(() => {
+				homePromotionSlides[activePromotionSlide].hidden = true;
+				homePromotionSlides[activePromotionSlide].setAttribute('aria-hidden', 'true');
+				activePromotionSlide = (activePromotionSlide + 1) % homePromotionSlides.length;
+				homePromotionSlides[activePromotionSlide].hidden = false;
+				homePromotionSlides[activePromotionSlide].setAttribute('aria-hidden', 'false');
+			}, 3000);
 		}
 
 		const PENDING_KEY = 'pendingWinnerClaims';
@@ -833,8 +841,6 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		}
 		if (winnersTableBody) {
 			sortWinnerRows();
-			renderHomeWinners();
-			new MutationObserver(renderHomeWinners).observe(winnersTableBody, {childList:true,subtree:true});
 		}
 
 		function resolveWinnerNameFromClaimForm() {
