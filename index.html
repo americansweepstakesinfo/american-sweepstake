@@ -521,17 +521,18 @@ ________________________________________________________________________________
 					<li><button type="button" id="agentDavidGreen" style="background:none;border:none;padding:0;color:#fff;text-decoration:underline;cursor:pointer;font:inherit;">David Green</button></li>
 					<li><button type="button" id="agentJamesCarter" style="background:none;border:none;padding:0;color:#fff;text-decoration:underline;cursor:pointer;font:inherit;">James Carter</button></li>
 					<li><button type="button" id="agentJerryTruman" style="background:none;border:none;padding:0;color:#fff;text-decoration:underline;cursor:pointer;font:inherit;">Jerry Truman</button></li>
-					<li>Frank Bözake</li>
-					<li>Bill Casper</li>
-					<li>Jack Bercord</li>
-					<li>Catherine Bloom</li>
-					<li>Mary Hart</li>
-					<li>John Peterson</li>
-					<li>David White</li>
-					<li>Robert Peterson</li>
-					<li>Susan Williams</li>
+					<li><button type="button" id="agentFrankBozake" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Frank Bözake</button></li>
+					<li><button type="button" id="agentBill Casper" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Bill Casper</button></li>
+					<li><button type="button" id="agentGregWilliiams" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Greg Williams</button></li>
+					<li><button type="button" id="agentCatherine Bloom" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Catherine Bloom</button></li>
+					<li><button type="button" id="agentMary Hart" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Mary Hart</button></li>
+					<li><button type="button" id="agentJohn Peterson" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">John Peterson</button></li>
+					<li><button type="button" id="agentDavid White" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">David White</button></</li>
+					<li><button type="button" id="agentRobert Peterson" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Robert Peterson</button></</li>
+					<li><button type="button" id="agentSusan Williams" style="background:none;border:none;padding:0;color: #fff; text-decoration:underline;cursor:pointer;font:inherit;">Susan Williams</button></li>
 				</ul>
 				<div id="agentDetails" style="margin-top:14px;padding:12px;border:1px solid rgba(255,255,255,0.18);border-radius:10px;background:rgba(255,255,255,0.08);display:none;">
+					<img id="agentDetailsPhoto" alt="" style="display:none;width:120px;height:120px;object-fit:cover;border-radius:10px;margin-bottom:12px;" />
 					<p id="agentDetailsName" style="margin:0 0 8px;font-weight:700;color:#ffffff;"></p>
 					<p id="agentDetailsPhone" style="margin:0 0 6px;color:#ffffff;"></p>
 					<p id="agentDetailsBio" style="margin:0;color:#ffffff;"></p>
@@ -798,14 +799,30 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			const pending = (getPendingClaims() || []).map(normalizeName);
 			const claimed = (getClaimedNames() || []).map(normalizeName);
 			const rows = winnersTableBody.querySelectorAll('tr');
+			function resolveUniqueWinnerName(claimName) {
+				const exactMatch = Array.from(rows).find(row => normalizeName(row.cells[0].textContent) === claimName);
+				if (exactMatch) return normalizeName(exactMatch.cells[0].textContent);
+
+				const claimParts = claimName.split(' ');
+				if (claimParts.length !== 2) return '';
+				const matches = Array.from(rows).filter(row => {
+					const winnerParts = normalizeName(row.cells[0].textContent).split(' ');
+					return winnerParts.length > 2
+						&& winnerParts[0] === claimParts[0]
+						&& winnerParts[winnerParts.length - 1] === claimParts[1];
+				});
+				return matches.length === 1 ? normalizeName(matches[0].cells[0].textContent) : '';
+			}
+			const pendingWinners = new Set(pending.map(resolveUniqueWinnerName).filter(Boolean));
+			const claimedWinners = new Set(claimed.map(resolveUniqueWinnerName).filter(Boolean));
 			rows.forEach(row => {
 				const rowName = row.cells && row.cells[0] ? row.cells[0].textContent.trim() : '';
 				if (!row.cells[1]) return;
 				const n = normalizeName(rowName);
-				if (claimed.indexOf(n) !== -1) {
-					row.cells[1].textContent = 'Claimed';
-				} else if (pending.indexOf(n) !== -1) {
+				if (pendingWinners.has(n)) {
 					row.cells[1].textContent = 'Pending';
+				} else if (claimedWinners.has(n)) {
+					row.cells[1].textContent = 'Claimed';
 				} else if (statuses[rowName]) {
 					row.cells[1].textContent = statuses[rowName];
 				} else {
@@ -841,6 +858,10 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		}
 		if (winnersTableBody) {
 			sortWinnerRows();
+		}
+		applyWinnerStatuses();
+		if (window.location.hash === '#winners') {
+			showSection('winners');
 		}
 
 		function resolveWinnerNameFromClaimForm() {
@@ -944,25 +965,8 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 
 			renderClaimStep();
 
-			claimForm.addEventListener('submit', function() {
-				const selectedWinner = resolveWinnerNameFromClaimForm();
-				if (selectedWinner) {
-					const selectedWinnerInput = document.getElementById('selectedWinnerInput');
-					if (selectedWinnerInput) selectedWinnerInput.value = selectedWinner;
-					// mark pending immediately so the user sees the change while form sends
-					// also add to pending storage (normalized)
-					const pending = getPendingClaims();
-					const n = normalizeName(selectedWinner);
-					if (pending.indexOf(n) === -1) {
-						pending.push(n);
-						savePendingClaims(pending);
-					}
-					updateWinnerStatus(selectedWinner, 'Pending');
-				}
-			});
 		}
 
-		// enhance the generic sendFormToEmail to handle claimForm result: mark as Claimed on success
 		const officialDocumentRequestForm = document.getElementById('officialDocumentRequestForm');
 		const officialDocRequestMessage = document.getElementById('officialDocRequestMessage');
 		const officialRulesModal = document.getElementById('officialRulesModal');
@@ -976,6 +980,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			if (!form || !messageEl) return;
 			form.addEventListener('submit', function(e){
 				e.preventDefault();
+				const selectedWinner = form.id === 'claimForm' ? resolveWinnerNameFromClaimForm() : '';
 				const submitButton = form.querySelector('button[type="submit"]');
 				if (submitButton) submitButton.disabled = true;
 
@@ -988,34 +993,17 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 						messageEl.style.display = 'block';
 						form.reset();
 
-						// If this was the weekly payment claim form, mark the winner as Claimed
-						if (form.id === 'claimForm') {
-							const selectedWinner = resolveWinnerNameFromClaimForm();
-							if (selectedWinner) {
-								// remove from pending
-								const pending = getPendingClaims().filter(x => x !== normalizeName(selectedWinner));
+						if (form.id === 'claimForm' && selectedWinner) {
+							const normalizedName = normalizeName(selectedWinner);
+							const pending = getPendingClaims().map(normalizeName);
+							if (!pending.includes(normalizedName)) {
+								pending.push(normalizedName);
 								savePendingClaims(pending);
-								// add to claimed
-								const claimed = getClaimedNames();
-								const n = normalizeName(selectedWinner);
-								if (claimed.indexOf(n) === -1) {
-									claimed.push(n);
-									saveClaimedNames(claimed);
-								}
-								updateWinnerStatus(selectedWinner, 'Claimed');
-
-								// set payment release timestamp (10 days + 5 hours)
-								const releaseMs = ((10 * 24) + 5) * 3600 * 1000;
-								const releaseTs = Date.now() + releaseMs;
-								const storageKey = 'paymentRelease_' + n;
-								localStorage.setItem(storageKey, String(releaseTs));
-								localStorage.setItem('lastPaymentRelease', String(releaseTs));
-								localStorage.setItem('lastClaimedWinner', selectedWinner);
-
-								// redirect to processing/countdown page for the winner
-								const urlName = encodeURIComponent(selectedWinner);
-								window.location.href = `claim-processing.html?name=${urlName}`;
 							}
+							saveClaimedNames(getClaimedNames().filter(name => normalizeName(name) !== normalizedName));
+							updateWinnerStatus(selectedWinner, 'Pending');
+							applyWinnerStatuses();
+							showSection('winners');
 						}
 					} else {
 						messageEl.textContent = 'There was a problem sending your form. Please try again.';
@@ -1181,6 +1169,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		window.addEventListener('load', ()=>{
 			document.getElementById('code').focus();
 			const agentDetails = document.getElementById('agentDetails');
+			const agentPhoto = document.getElementById('agentDetailsPhoto');
 			const agentName = document.getElementById('agentDetailsName');
 			const agentPhone = document.getElementById('agentDetailsPhone');
 			const agentBio = document.getElementById('agentDetailsBio');
@@ -1194,6 +1183,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 				jamesCarter: {
 					name: 'James Carter',
 					phone: '1(772)254-0219',
+					photo: 'James Carter.png',
 					bio: 'James Carter is an Agent of American Sweepstakes & Promotion Co. joined in April 2019, initially taking on the role of Delivery agent Coordinator. In this position, he contributed significantly to the optimization of the company’s operations.'
 				},
 				jerryTruman: {
@@ -1207,6 +1197,11 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 				if (!agentDetails || !agentName || !agentPhone || !agentBio) return;
 				const data = agents[agent];
 				if (!data) return;
+				if (agentPhoto) {
+					agentPhoto.style.display = data.photo ? 'block' : 'none';
+					agentPhoto.src = data.photo || '';
+					agentPhoto.alt = data.photo ? data.name : '';
+				}
 				agentName.textContent = data.name;
 				agentPhone.textContent = 'Phone: ' + data.phone;
 				agentBio.textContent = 'Bio: ' + data.bio;

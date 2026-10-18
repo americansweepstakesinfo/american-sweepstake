@@ -361,7 +361,6 @@
         const firstName = formData.get('firstName') || '';
         const lastName = formData.get('lastName') || '';
         const fullName = `${firstName} ${lastName}`.trim();
-        savePendingClaim(fullName);
 
         if (signatureText && signatureText.value.trim() && signatureData) {
           formData.set('signatureData', `Typed signature: ${signatureText.value.trim()}`);
@@ -375,6 +374,7 @@
           body: formData
         }).then(response => {
           if (response.ok) {
+            savePendingClaim(fullName);
             claimSubmitMessage.textContent = 'Claim submitted. Your status is now pending and you will be redirected to the winners list.';
             claimSubmitMessage.style.display = 'block';
             claimSubmitMessage.style.color = '#134e8a';
@@ -385,7 +385,7 @@
             throw new Error('submit failed');
           }
         }).catch(() => {
-          claimSubmitMessage.textContent = 'Your claim was saved locally as pending, but there was a problem sending the form. Please try again.';
+          claimSubmitMessage.textContent = 'There was a problem sending your claim. Please try again.';
           claimSubmitMessage.style.display = 'block';
           claimSubmitMessage.style.color = '#b00020';
         }).finally(() => {

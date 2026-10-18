@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="Logo1.png.png" />
+  <title>Claim Received</title>
+    <style>
+        body{box-sizing:border-box;margin:0;min-height:100vh;padding:24px;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#0047ab,#ff0000);color:#fff;display:flex;align-items:center;justify-content:center}
+        .card{box-sizing:border-box;background:rgba(255,255,255,0.06);padding:28px;border-radius:12px;max-width:820px;width:94%;text-align:center;border:1px solid rgba(255,255,255,0.12)}
+        .logo{display:block;max-width:min(220px,80%);max-height:140px;object-fit:contain;margin:0 auto 18px}
+        h1{margin:0 0 8px;font-size:22px;color:#ffd700}
+        p.note{color:#e8f4ff;margin:8px 0 18px}
+        .progress-container{width:100%;max-width:600px;height:30px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.35);border-radius:25px;overflow:hidden;margin:20px auto}
+        .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#e70808,#1100ff);text-align:center;line-height:30px;color:#002;font-weight:700;transition:width 1s linear}
+        .message{margin-top:16px;color:#fff}
+        a.btn{display:inline-block;margin-top:18px;padding:10px 16px;border-radius:999px;background:linear-gradient(90deg,#ffd700,#ff8a00);color:#000;font-weight:700;text-decoration:none}
+    </style>
+</head>
+<body>
+    <main class="card">
+        <img class="logo" src="Picture3.png" alt="Logo">
+        <h1>Claim Weekly Payment</h1>
+        <p class="note">Thank you. Don't exit this page or turn off your device. Your weekly payment will be processed after the required review and approvals. Please be patient — a number of documents must be signed, stamped, and approved before release.</p>
+
+        <div class="progress-container" role="progressbar" aria-label="Test simulation progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+
+        <p class="note">This is a process that requires patience you have won a large prize and approvals take time. The $10,000 weekly will be sent via ACH to your new checking account a feederal agent will contact you from Federal Reserve Bank.</p>
+        <p class="message" id="timer" aria-live="off">90:00 remaining</p>
+        <a class="btn" href="index.html">Return Home</a>
+    </main>
+
+    <script>
+        const totalTime = 90 * 60; // 90 minutes in seconds
+        let elapsedTime = 0;
+
+        const progressBar = document.getElementById('progressBar');
+        const timerDisplay = document.getElementById('timer');
+
+        function updateProgress() {
+            elapsedTime++;
+
+            // Calculate percentage
+            const percent = (elapsedTime / totalTime) * 100;
+            progressBar.style.width = percent + "%";
+            progressBar.textContent = Math.floor(percent) + "%";
+            progressBar.parentElement.setAttribute('aria-valuenow', String(Math.floor(percent)));
+
+            // Calculate remaining time
+            const remaining = totalTime - elapsedTime;
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+
+            // Stop when time is up
+            if (elapsedTime >= totalTime) {
+                clearInterval(interval);
+                progressBar.textContent = "Complete";
+                timerDisplay.textContent = "00:00 remaining";
+            }
+        }
+
+        // Update every second
+        const interval = setInterval(updateProgress, 1000);
+    </script>
+
+  <script>
+    function qs(name){ return new URLSearchParams(window.location.search).get(name) || ''; }
+    function normalize(s){return (s||'').trim().replace(/\s+/g,' ').toLowerCase();}
+
+    const rawName = qs('name') || localStorage.getItem('lastClaimedWinner') || '';
+    const winnerEl = document.getElementById('winnerName');
+    if (rawName) winnerEl.textContent = `Processing payment for ${rawName}`;
+
+    const nameKey = normalize(rawName);
+    const storageKey = nameKey ? ('paymentRelease_' + nameKey) : 'paymentRelease';
+
+    function readTS(){
+      const v = localStorage.getItem(storageKey) || localStorage.getItem('lastPaymentRelease');
+      return v ? parseInt(v,10) : null;
+    }
+
+    // If no timestamp present, show message
+    let target = readTS();
+    // fallback: set 10 days 13 hours from now if not present
+    if (!target) {
+      const releaseMs = ((10*24) + 13) * 3600 * 1000;
+      target = Date.now() + releaseMs;
+      localStorage.setItem(storageKey, String(target));
+      localStorage.setItem('lastPaymentRelease', String(target));
+      if (rawName) localStorage.setItem('lastClaimedWinner', rawName);
+    }
+
+    function isWeekend(d){
+      const day = d.getDay();
+      return day === 0 || day === 6;
+    }
+
+    function nextBusinessDate(d){
+      const dt = new Date(d.getTime());
+      while(isWeekend(dt)) dt.setDate(dt.getDate() + 1);
+      return dt;
+    }
+
+    function businessDaysBetween(a, b){
+      // count business days from now (a) up to target (b), inclusive of neither
+      const start = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+      const end = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+      if (end <= start) return 0;
+      let count = 0;
+      const day = new Date(start);
+      day.setDate(day.getDate() + 1);
+      while(day <= end){
+        const wd = day.getDay();
+        if (wd !== 0 && wd !== 6) count++;
+        day.setDate(day.getDate() + 1);
+      }
+      return count;
+    }
+
+    function updateClock(){
+      const now = Date.now();
+      let diff = Math.max(0, target - now);
+      const days = Math.floor(diff / (24*3600*1000));
+      diff -= days * 24*3600*1000;
+      const hours = Math.floor(diff / (3600*1000));
+      diff -= hours * 3600*1000;
+      const minutes = Math.floor(diff / (60*1000));
+      diff -= minutes * 60*1000;
+      const seconds = Math.floor(diff / 1000);
+
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      document.getElementById('minutes').textContent = minutes;
+      document.getElementById('seconds').textContent = seconds;
+
+      if (target <= Date.now()) {
+        clearInterval(intervalId);
+        document.querySelector('.message').textContent = 'Payment processing complete. The weekly payment has been scheduled to your account.';
+      }
+      // update estimated ACH date display
+      const estEl = document.getElementById('estimatedDate');
+      if (estEl) {
+        const raw = new Date(target);
+        const adjusted = nextBusinessDate(raw);
+        const businessDays = businessDaysBetween(new Date(), raw);
+        estEl.textContent = `Estimated ACH deposit date: ${adjusted.toLocaleString()} (in ${businessDays} business day${businessDays===1?'':'s'})`;
+      }
+    }
+
+    updateClock();
+    const intervalId = setInterval(updateClock, 1000);
+
+    // Test button: reveal only when running on localhost or when ?debug=1 is present
+    (function setupTestButton(){
+      const params = new URLSearchParams(window.location.search);
+      const debug = params.get('debug');
+      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const btn = document.getElementById('fastReleaseBtn');
+      if (!btn) return;
+      if (isLocal || debug === '1') {
+        btn.style.display = 'inline-block';
+        btn.addEventListener('click', function(){
+          // set release to now and update storage
+          target = Date.now();
+          localStorage.setItem(storageKey, String(target));
+          localStorage.setItem('lastPaymentRelease', String(target));
+          updateClock();
+        });
+      }
+    })();
+    </script>
+</body>
+</html>
