@@ -629,10 +629,10 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 		const loginDescription = document.getElementById('loginDescription');
 
 		// The site will always ask for the code on each visit (no persistence used).
-		const PAGE_ACCESS_CODE = '8722';
+		const PAGE_ACCESS_CODE = '7748';
 		const CLAIM_CODE = '8722';
-		let pageUnlocked = false;
-		let claimUnlocked = false;
+		let pageUnlocked = true;
+		let claimUnlocked = true;
 		// Auto-unlock when opened locally (file:// or localhost) or when URL contains ?open=1
 		try {
 			const urlParams = new URLSearchParams(window.location.search);
@@ -1182,15 +1182,13 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 					phone: '1(906)200-5566',
 					bio: 'David Green is an Agent of American Sweepstakes & Promotion Co. joined in April 2019, initially taking on the role of Delivery agent Coordinator. In this position, he contributed significantly to the optimization of the company’s operations.'
 				},
-				jamesCarter: { 
-					<img src="James Carter.png"
+				jamesCarter: {
 					name: 'James Carter',
 					phone: '1(772)254-0219',
 					photo: 'James Carter.png',
 					bio: 'James Carter is an Agent of American Sweepstakes & Promotion Co. joined in April 2019, initially taking on the role of Delivery agent Coordinator. In this position, he contributed significantly to the optimization of the company’s operations.'
 				},
 				jerryTruman: {
-				<img src="Jerry Truman.png"
 					name: 'Jerry Truman',
 					phone: '1(516)585-6755',
 					bio: 'Jerry Truman is an Elite Member of the Communications Department. He joined our organization in June 2010 with outstanding experience in communicating and is equipped with marvelous assistance skills to help our consumers.'
