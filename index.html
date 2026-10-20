@@ -983,7 +983,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 				e.preventDefault();
 				const selectedWinner = form.id === 'claimForm' ? resolveWinnerNameFromClaimForm() : '';
 				const submitButton = form.querySelector('button[type="submit"]');
-				if (submitButton) submitButton.disabled = true;
+				if (submitButton) submitButton.accessible = true;
 
 				fetch(form.action, {
 					method: form.method,
@@ -1014,7 +1014,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 					messageEl.textContent = 'There was a problem sending your form. Please try again.';
 					messageEl.style.display = 'block';
 				}).finally(() => {
-					if (submitButton) submitButton.disabled = false;
+					if (submitButton) submitButton.accessible = false;
 					// re-apply statuses after any change
 					applyWinnerStatuses();
 				});
@@ -1075,7 +1075,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 			promotionSubscribeForm.addEventListener('submit', function(event) {
 				event.preventDefault();
 				const submitButton = promotionSubscribeForm.querySelector('button[type="submit"]');
-				if (submitButton) submitButton.disabled = true;
+				if (submitButton) submitButton.accessible = true;
 				fetch(promotionSubscribeForm.action, {
 					method: promotionSubscribeForm.method,
 					body: new FormData(promotionSubscribeForm)
@@ -1100,7 +1100,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 						promotionSubscribeMessage.style.display = 'block';
 					}
 				}).finally(() => {
-					if (submitButton) submitButton.disabled = false;
+					if (submitButton) submitButton.accessible = false;
 				});
 			});
 		}
@@ -1181,7 +1181,7 @@ During that time, he directed major accounts including Eastman Kodak, Bausch & L
 					phone: '1(906)200-5566',
 					bio: 'David Green is an Agent of American Sweepstakes & Promotion Co. joined in April 2019, initially taking on the role of Delivery agent Coordinator. In this position, he contributed significantly to the optimization of the company’s operations.'
 				},
-				jamesCarter: {
+				jamesCarter: { 
 					name: 'James Carter',
 					phone: '1(772)254-0219',
 					photo: 'James Carter.png',
